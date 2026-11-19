@@ -1,51 +1,95 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Services\CartService;
+use App\Services\WishlistService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Show login page
      */
-    public function create(): View
+    public function create(Request $request)
     {
+        if (! $request->session()->has('url.intended')) {
+            $referer = $request->headers->get('referer');
+            if ($referer && str_starts_with($referer, $request->root()) && ! str_contains($referer, '/login')) {
+                $request->session()->put('url.intended', $referer);
+            }
+        }
+
         return view('auth.login');
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Handle login request
      */
-   public function store(LoginRequest $request): RedirectResponse
-{
-    $request->authenticate();
+    public function store(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+    
+        if (Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password,
+            'status' => 1,
+        ])) {
+    
+            $request->session()->regenerate();
 
-    $request->session()->regenerate();
+            app(CartService::class)->mergeGuestCartToUser(Auth::id());
+            app(WishlistService::class)->mergeGuestWishlistToUser(Auth::id());
 
-    if (auth()->user()->role == 'admin') {
-        return redirect()->route('admin.dashboard');
+            $user = Auth::user();
+    
+            // Admin Login
+            if ($user->role_id == 1) {
+    
+                return redirect()->route('admin.dashboard')
+                    ->with('success', 'Welcome Admin!');
+    
+            }
+    
+            // Frontend User Login
+            return redirect()->intended('/')
+                ->with('success', 'Login successful. Welcome back!');
+        }
+
+        $inactiveUser = \App\Models\User::where('email', $request->email)->first();
+
+        if ($inactiveUser && (int) $inactiveUser->status !== 1) {
+            return back()
+                ->withInput($request->only('email'))
+                ->with('error', 'Your account is inactive. Please contact support.')
+                ->withErrors([
+                    'email' => 'Your account is inactive. Please contact support.',
+                ]);
+        }
+    
+        return back()
+            ->withInput($request->only('email'))
+            ->with('error', 'Invalid email or password.')
+            ->withErrors([
+                'email' => 'Invalid email or password.',
+                'password' => 'Invalid email or password.',
+            ]);
     }
 
-    return redirect()->route('dashboard');
-}
-
     /**
-     * Destroy an authenticated session.
+     * Logout
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request)
     {
-        Auth::guard('web')->logout();
+        Auth::logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/')->with('success', 'You have been logged out successfully.');
     }
 }

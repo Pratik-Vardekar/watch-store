@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Review;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ReviewController extends Controller
 {
@@ -13,24 +15,21 @@ class ReviewController extends Controller
     {
         $query = Review::with('user', 'product');
 
-        // Search filter (user name, email, or review content)
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('review', 'like', "%{$search}%")
-                  ->orWhereHas('user', function($userQuery) use ($search) {
-                      $userQuery->where('name', 'like', "%{$search}%")
-                                ->orWhere('email', 'like', "%{$search}%");
-                  });
+                    ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
             });
         }
 
-        // Product filter
         if ($request->filled('product_id')) {
             $query->where('product_id', $request->product_id);
         }
 
-        // Rating filter
         if ($request->filled('rating')) {
             $rating = $request->rating;
             if ($rating == '5') {
@@ -40,41 +39,133 @@ class ReviewController extends Controller
             }
         }
 
-        // Status filter
-        if ($request->filled('status') && in_array($request->status, ['0', '1'])) {
+        if ($request->filled('status') && in_array($request->status, ['0', '1'], true)) {
             $query->where('status', $request->status);
         }
 
-        // Date filter
         if ($request->filled('date')) {
             $query->whereDate('created_at', $request->date);
         }
 
-        // Apply sorting
         $query->latest();
 
-        // Paginate with preserving query parameters
         $reviews = $query->paginate(10)->withQueryString();
-
-        // Get products for filter dropdown
         $products = Product::orderBy('name')->get();
 
         return view('admin.review.index', compact('reviews', 'products'));
     }
 
+    public function create()
+    {
+        $products = Product::where('status', 1)->orderBy('name')->get();
+        $users = User::orderBy('name')->get(['id', 'name', 'email', 'avatar']);
+
+        return view('admin.review.create', compact('products', 'users'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'user_id' => 'required|exists:users,id',
+            'rating' => 'required|integer|min:1|max:5',
+            'title' => 'nullable|string|max:255',
+            'review' => 'required|string|max:5000',
+            'status' => 'required|in:0,1',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
+
+        $title = trim((string) ($validated['title'] ?? ''));
+        $body = trim($validated['review']);
+        $reviewText = $title !== '' ? $title . "\n\n" . $body : $body;
+
+        $imageName = null;
+        if ($request->hasFile('image')) {
+            $imageName = time() . '_' . Str::random(8) . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('backend/assets/images/review'), $imageName);
+        }
+
+        Review::create([
+            'user_id' => $validated['user_id'],
+            'product_id' => $validated['product_id'],
+            'rating' => (int) $validated['rating'],
+            'review' => $reviewText,
+            'status' => (int) $validated['status'],
+            'image' => $imageName,
+        ]);
+
+        return redirect()
+            ->route('admin.review.index')
+            ->with('success', 'Review added successfully');
+    }
+
+    public function show(Review $review)
+    {
+        return redirect()->route('admin.review.index');
+    }
+
+    public function edit(Review $review)
+    {
+        $review->load(['user', 'product']);
+        $products = Product::orderBy('name')->get();
+        $users = User::orderBy('name')->get(['id', 'name', 'email', 'avatar']);
+
+        return view('admin.review.edit', compact('review', 'products', 'users'));
+    }
+
+    public function update(Request $request, Review $review)
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'user_id' => 'required|exists:users,id',
+            'rating' => 'required|integer|min:1|max:5',
+            'title' => 'nullable|string|max:255',
+            'review' => 'required|string|max:5000',
+            'status' => 'required|in:0,1',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
+
+        $title = trim((string) ($validated['title'] ?? ''));
+        $body = trim($validated['review']);
+        $reviewText = $title !== '' ? $title . "\n\n" . $body : $body;
+
+        $data = [
+            'user_id' => $validated['user_id'],
+            'product_id' => $validated['product_id'],
+            'rating' => (int) $validated['rating'],
+            'review' => $reviewText,
+            'status' => (int) $validated['status'],
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($review->image && file_exists(public_path('backend/assets/images/review/' . $review->image))) {
+                unlink(public_path('backend/assets/images/review/' . $review->image));
+            }
+
+            $imageName = time() . '_' . Str::random(8) . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('backend/assets/images/review'), $imageName);
+            $data['image'] = $imageName;
+        }
+
+        $review->update($data);
+
+        return redirect()
+            ->route('admin.review.index')
+            ->with('success', 'Review updated successfully');
+    }
+
     public function status(Request $request, Review $review)
     {
-        // Toggle status if no status provided in request
-        $status = $request->has('status') 
-            ? $request->status 
+        $status = $request->has('status')
+            ? $request->status
             : ($review->status == 1 ? 0 : 1);
 
         $review->update([
-            'status' => $status
+            'status' => $status,
         ]);
 
-        $message = $review->status == 1 
-            ? 'Review approved successfully' 
+        $message = $review->status == 1
+            ? 'Review approved successfully'
             : 'Review marked as pending';
 
         return back()->with('success', $message);
@@ -82,11 +173,11 @@ class ReviewController extends Controller
 
     public function destroy(Review $review)
     {
-        // Delete Review Image
         if ($review->image && file_exists(public_path('backend/assets/images/review/' . $review->image))) {
             unlink(public_path('backend/assets/images/review/' . $review->image));
         }
 
+        $review->deleteMediaFiles();
         $review->delete();
 
         return back()->with('success', 'Review deleted successfully');
@@ -96,15 +187,14 @@ class ReviewController extends Controller
     {
         $query = Review::with('user', 'product');
 
-        // Apply same filters as index method
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('review', 'like', "%{$search}%")
-                  ->orWhereHas('user', function($userQuery) use ($search) {
-                      $userQuery->where('name', 'like', "%{$search}%")
-                                ->orWhere('email', 'like', "%{$search}%");
-                  });
+                    ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -121,7 +211,7 @@ class ReviewController extends Controller
             }
         }
 
-        if ($request->filled('status') && in_array($request->status, ['0', '1'])) {
+        if ($request->filled('status') && in_array($request->status, ['0', '1'], true)) {
             $query->where('status', $request->status);
         }
 
@@ -131,11 +221,9 @@ class ReviewController extends Controller
 
         $reviews = $query->latest()->get();
 
-        // Create CSV
         $filename = 'reviews_export_' . date('Y-m-d_His') . '.csv';
         $handle = fopen('php://temp', 'w');
 
-        // Add CSV headers
         fputcsv($handle, [
             'ID',
             'User Name',
@@ -146,10 +234,9 @@ class ReviewController extends Controller
             'Has Image',
             'Status',
             'Created Date',
-            'Created Time'
+            'Created Time',
         ]);
 
-        // Add data rows
         foreach ($reviews as $review) {
             fputcsv($handle, [
                 $review->id,
@@ -161,29 +248,26 @@ class ReviewController extends Controller
                 $review->image ? 'Yes' : 'No',
                 $review->status == 1 ? 'Approved' : 'Pending',
                 $review->created_at->format('Y-m-d'),
-                $review->created_at->format('H:i:s')
+                $review->created_at->format('H:i:s'),
             ]);
         }
 
-        // Reset pointer and get content
         rewind($handle);
         $csvContent = stream_get_contents($handle);
         fclose($handle);
 
-        // Return as download
         return response($csvContent, 200, [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ]);
     }
 
-    // Optional: Bulk action method for approving/rejecting multiple reviews
     public function bulkAction(Request $request)
     {
         $request->validate([
             'ids' => 'required|array',
             'ids.*' => 'exists:reviews,id',
-            'action' => 'required|in:approve,pending,delete'
+            'action' => 'required|in:approve,pending,delete',
         ]);
 
         $count = 0;
@@ -198,12 +282,12 @@ class ReviewController extends Controller
                 $message = $count . ' review(s) marked as pending';
                 break;
             case 'delete':
-                // Delete images first
                 $reviews = Review::whereIn('id', $request->ids)->get();
                 foreach ($reviews as $review) {
                     if ($review->image && file_exists(public_path('backend/assets/images/review/' . $review->image))) {
                         unlink(public_path('backend/assets/images/review/' . $review->image));
                     }
+                    $review->deleteMediaFiles();
                 }
                 $count = Review::whereIn('id', $request->ids)->delete();
                 $message = $count . ' review(s) deleted successfully';

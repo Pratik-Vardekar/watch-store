@@ -1,0 +1,519 @@
+@extends('layouts.front')
+@section('content')
+<main class="pageWrapper">
+
+   {{-- Slider --}}
+   <section class="homeBanner swiper overflow-hidden mb-4">
+      <div class="swiper-wrapper">
+
+          @forelse($sliders as $slider)
+              <div class="swiper-slide">
+                  <picture>
+                      <source srcset="{{ $slider->image_url }}" media="(min-width:768px)">
+                      <img src="{{ $slider->image_url }}"
+                           alt="{{ $slider->title }}"
+                           class="hbImg"
+                           data-swiper-parallax="50%"
+                           data-swiper-parallax-scale="1.5">
+                  </picture>
+
+                  <div class="heroContent text-white">
+                      <div class="container h-100 d-flex"
+                           data-swiper-parallax-x="100%"
+                           data-swiper-parallax-opacity="0">
+
+                          <div class="col-xl-6 col-md-7 pe-xxl-5 align-self-md-center align-self-end d-flex flex-column gap-md-4 gap-3">
+
+                              <div class="hbHead titleFont">
+                                  @if($slider->subtitle)
+                                      <span class="txtGold d-block">
+                                          {{ $slider->title }}
+                                      </span>
+                                  @endif
+
+                                  <strong>{{ $slider->subtitle }}</strong>
+                              </div>
+
+                              @if($slider->description)
+                                  <div class="hbPara">
+                                      {{ $slider->description }}
+                                  </div>
+                              @endif
+
+                              @if($slider->link)
+                                  <div>
+                                      <a href="{{ $slider->link }}" class="ctaBtn">
+                                          Shop Now
+                                      </a>
+                                  </div>
+                              @endif
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          @empty
+              <div class="swiper-slide">
+                  <picture>
+                      <img src="{{ asset('frontend/assets/images/heroBanner_1.jpg') }}"
+                           class="hbImg"
+                           alt="No Slider">
+                  </picture>
+
+                  <div class="heroContent text-white">
+                      <div class="container h-100 d-flex">
+                          <div class="col-xl-6 col-md-7 align-self-center">
+                              <div class="hbHead titleFont">
+                                  <span class="txtGold d-block">
+                                      Welcome
+                                  </span>
+                                  <strong>No Slider Available</strong>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          @endforelse
+
+      </div>
+
+      <div class="hbPagination swiper-pagination text-end text-md-start container mx-auto"></div>
+  </section>
+
+{{-- Our Brands --}}
+<section class="py-md-5 py-4 overflow-hidden">
+   <h2 class="sectTitle text-center mb-4">Our Brands</h2>
+   @php
+       $half = ceil($brands->count() / 2);
+   @endphp
+
+   <!-- First Row -->
+   <div class="swiper marqueStrip overflow-visible">
+       <div class="swiper-wrapper">
+           @foreach($brands->slice(0, $half) as $brand)
+               <div class="swiper-slide">
+                   <a href="{{ route('product.listing', ['brand' => [$brand->id]]) }}" title="View {{ $brand->name }} products">
+                       <img src="{{ $brand->logo_url }}" alt="{{ $brand->name }}">
+                   </a>
+               </div>
+           @endforeach
+       </div>
+   </div>
+
+   <!-- Second Row -->
+   <div class="swiper marqueStrip overflow-visible" dir="rtl">
+       <div class="swiper-wrapper">
+           @foreach($brands->slice($half) as $brand)
+               <div class="swiper-slide">
+                   <a href="{{ route('product.listing', ['brand' => [$brand->id]]) }}" title="View {{ $brand->name }} products">
+                       <img src="{{ $brand->logo_url }}" alt="{{ $brand->name }}">
+                   </a>
+               </div>
+           @endforeach
+       </div>
+   </div>
+
+   <!-- Fallback if no brands exist -->
+   @if($brands->isEmpty())
+       <div class="text-center my-5">
+           <p>No brands available at the moment.</p>
+       </div>
+   @endif
+</section>
+
+    <section class="py-md-5 py-4 mb-sm-5 mb-4 overflow-hidden">
+       <div class="container">
+
+          <div class="row g-lg-5 g-4">
+             @forelse($watchBanners as $index => $banner)
+                @php
+                    $animation = $index % 2 === 0 ? 'slideLeft' : 'slideRight';
+                    $titleParts = preg_split('/\s+/', trim((string) $banner->name), 2);
+                    $labelSmall = count($titleParts) > 1 ? $titleParts[0] : 'Watches';
+                    $labelLarge = count($titleParts) > 1 ? $titleParts[1] : $banner->name;
+                    // Keep classic "For Him / For Her" layout when name is only that phrase.
+                    if (preg_match('/^for\s+(him|her)$/i', (string) $banner->name)) {
+                        $labelSmall = 'Watches';
+                        $labelLarge = $banner->name;
+                    }
+                @endphp
+                <div class="col-md animateThis {{ $animation }}">
+                   <div class="catgBox rounded-3 animateThis">
+                      <img src="{{ $banner->image_url }}" alt="{{ $banner->name }}" class="catgImg">
+                      <div class="p-xl-5 p-4 d-flex justify-content-between align-items-center text-white w-100 position-absolute bottom-0">
+                         <h2 class="catgHead mb-0">
+                            <small class="fw-light">{{ $labelSmall }}</small>
+                            <span class="titleFont fst-italic d-block">{{ $labelLarge }}</span>
+                         </h2>
+                         <a href="{{ $banner->listing_url }}" class="ctaBtn ghost mt-3">Shop Now</a>
+                      </div>
+                   </div>
+                </div>
+             @empty
+                <div class="col-md animateThis slideLeft">
+                   <div class="catgBox rounded-3 animateThis">
+                      <img src="{{ asset('frontend/assets/images/catg_Mens.jpg') }}" alt="Watches For Him" class="catgImg">
+                      <div class="p-xl-5 p-4 d-flex justify-content-between align-items-center text-white w-100 position-absolute bottom-0">
+                         <h2 class="catgHead mb-0">
+                            <small class="fw-light">Watches</small>
+                            <span class="titleFont fst-italic d-block">For Him</span>
+                         </h2>
+                         <a href="{{ route('product.listing', ['gender' => 'men']) }}" class="ctaBtn ghost mt-3">Shop Now</a>
+                      </div>
+                   </div>
+                </div>
+                <div class="col-md animateThis slideRight">
+                   <div class="catgBox rounded-3 animateThis">
+                      <img src="{{ asset('frontend/assets/images/catg_Womens.jpg') }}" alt="Watches For Her" class="catgImg">
+                      <div class="p-xl-5 p-4 d-flex justify-content-between align-items-center text-white w-100 position-absolute bottom-0">
+                         <h2 class="catgHead mb-0">
+                            <small class="fw-light">Watches</small>
+                            <span class="titleFont fst-italic d-block">For Her</span>
+                         </h2>
+                         <a href="{{ route('product.listing', ['gender' => 'women']) }}" class="ctaBtn ghost mt-3">Shop Now</a>
+                      </div>
+                   </div>
+                </div>
+             @endforelse
+          </div>
+
+       </div>
+    </section>
+
+    <section class="bg-black">
+       <div class="servBanWrap overflow-hidden py-sm-4">
+          <img src="{{ asset('frontend/assets/images/textureBg.jpg') }}" alt="" class="servBg">
+
+          <div class="container py-5 position-relative z-1 text-center animateThis slideTop">
+             <div class="txtGold sectSubTxt mb-3">Authorised Service Center</div>
+             <h2 class="sectTitle text-white">Expert Care. Original Precision.</h2>
+
+             <div class="mt-5 mx-auto servCanvas position-relative">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 548.5 376.4" class="svgRoute">
+                   <path class="travelPath" fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="15" stroke-linecap="round" stroke-miterlimit="10" d="M411.2,123.3c0,0-171-138.5-210.6-109.3c-39.3,29,36.7,79.1,96.9,125.5c65.2,50.2,299.5,144.7,227.3,215c-76.1,74.1-299.4-221.4-410.4-306.1c-111-84.7-147.5,28.1-40,106.6s284.1,198.3,284.1,198.3"/>
+                </svg>
+                <img src="{{ asset('frontend/assets/images/servWatch_1.png') }}" alt="" class="servWatch_1 servWatch animateThis">
+                <img src="{{ asset('frontend/assets/images/servWatch_2.png') }}" alt="" class="servWatch_2 servWatch animateThis">
+             </div>
+
+          </div>
+
+       </div>
+       <div class="servList row row-cols-lg-4 row-cols-sm-2 row-cols-2 g-0 text-white text-center">
+
+          <div class="col animateThis fadeIn">
+             <div class="servItem d-flex flex-column">
+                <div class="servImgBox">
+                   <img src="{{ asset('frontend/assets/images/serv_Battery.jpg') }}" alt="" class="servImg">
+                   <div class="servHead">Battery</div>
+                </div>
+                <div class="servText flex-grow-1">
+                   We keep original batteries brands Seiko and Renata
+                </div>
+             </div>
+          </div>
+
+          <div class="col animateThis fadeIn" style="transition-delay:.4s;">
+             <div class="servItem d-flex flex-column">
+                <div class="servImgBox">
+                   <img src="{{ asset('frontend/assets/images/serv_Strap.jpg') }}" alt="" class="servImg">
+                   <div class="servHead">Strap</div>
+                </div>
+                <div class="servText flex-grow-1">
+                   We keep straps like genuine leather, metal, pvc & brand straps
+                </div>
+             </div>
+          </div>
+
+          <div class="col animateThis fadeIn" style="transition-delay:.5s;">
+             <div class="servItem d-flex flex-column">
+                <div class="servImgBox">
+                   <img src="{{ asset('frontend/assets/images/serv_Glass.jpg') }}" alt="" class="servImg">
+                   <div class="servHead">Glass</div>
+                </div>
+                <div class="servText flex-grow-1">
+                   We can change any watch glass
+                </div>
+             </div>
+          </div>
+
+          <div class="col animateThis fadeIn" style="transition-delay:.6s;">
+             <div class="servItem d-flex flex-column">
+                <div class="servImgBox">
+                   <img src="{{ asset('frontend/assets/images/serv_Mechanical.jpg') }}" alt="" class="servImg">
+                   <div class="servHead">Mechanical</div>
+                </div>
+                <div class="servText flex-grow-1">
+                   We have trained & specialized technician for mechanical watches
+                </div>
+             </div>
+          </div>
+       </div>
+    </section>
+
+    <section class="py-md-5 py-4 overflow-hidden bgGray">
+       <div class="container py-4">
+          <h2 class="sectTitle text-center mb-4">Our Bestsellers</h2>
+
+          <div class="swiper productSlider pb-sm-5 pb-3 mb-4">
+             <div class="swiper-wrapper">
+                @forelse($bestSellingProducts as $product)
+                   @include('frontend.partials.home-product-slide', ['product' => $product])
+                @empty
+                   <div class="swiper-slide">
+                      <div class="productItem text-center py-5">
+                         <p class="mb-0 text-muted">No bestsellers available yet.</p>
+                      </div>
+                   </div>
+                @endforelse
+             </div>
+             <div class="swiper-pagination"></div>
+          </div>
+
+          <div class="text-center">
+             <a href="{{ route('product.listing', ['filter' => 'best_selling']) }}" class="ctaBtn">View All</a>
+          </div>
+       </div>
+    </section>
+
+    {{-- More Than Just Watches --}}
+    <section class="py-md-5 py-4">
+       <div class="container py-4">
+          <h2 class="sectTitle text-center mb-2">More Than Just Watches</h2>
+          <div class="text-center sectSubTxt">Explore our extended range of products and services.</div>
+       </div>
+
+       @php
+           $homepageCards = ($homeHighlights ?? collect())
+               ->where('status', true)
+               ->sortBy('sort_order')
+               ->values();
+       @endphp
+
+       @if($homepageCards->isNotEmpty())
+           <div class="osWrap text-white text-center row row-cols-lg-4 row-cols-sm-2 row-cols-2 g-0 pb-4">
+              @foreach($homepageCards as $card)
+                  <div class="col animateThis fadeGrow">
+                     <div class="osBox d-flex flex-column justify-content-center">
+                        <img src="{{ $card->image_url }}" alt="{{ $card->title }}" class="osImg">
+                        <div class="col-auto osHead d-flex align-items-center justify-content-center">{{ $card->title }}</div>
+                     </div>
+                  </div>
+              @endforeach
+           </div>
+       @else
+           <div class="osWrap text-white text-center row row-cols-lg-4 row-cols-sm-2 row-cols-2 g-0 pb-4">
+              <div class="col animateThis fadeGrow">
+                 <div class="osBox d-flex flex-column justify-content-center">
+                    <img src="{{ asset('frontend/assets/images/os_wallclock.jpg') }}" alt="" class="osImg">
+                    <div class="col-auto osHead d-flex align-items-center justify-content-center">Wall Clocks</div>
+                 </div>
+              </div>
+              <div class="col animateThis fadeGrow">
+                 <div class="osBox d-flex flex-column justify-content-center">
+                    <img src="{{ asset('frontend/assets/images/os_corporategifts.jpg') }}" alt="" class="osImg">
+                    <div class="col-auto osHead d-flex align-items-center justify-content-center">Corporate Gifting</div>
+                 </div>
+              </div>
+              <div class="col animateThis fadeGrow">
+                 <div class="osBox d-flex flex-column justify-content-center">
+                    <img src="{{ asset('frontend/assets/images/os_emi.jpg') }}" alt="" class="osImg">
+                    <div class="col-auto osHead d-flex align-items-center justify-content-center">Easy EMI Options Available</div>
+                 </div>
+              </div>
+              <div class="col animateThis fadeGrow">
+                 <div class="osBox d-flex flex-column justify-content-center">
+                    <img src="{{ asset('frontend/assets/images/os_all.jpg') }}" alt="" class="osImg">
+                    <div class="col-auto osHead d-flex align-items-center justify-content-center">Perfumes, Pens, Wallets & Alarm Clocks</div>
+                 </div>
+              </div>
+           </div>
+       @endif
+    </section>
+
+    <section class="py-md-5 py-4 overflow-hidden bgGray">
+       <div class="container py-sm-4">
+          <h2 class="sectTitle text-center mb-4">New Arrivals</h2>
+
+          <div class="swiper productSlider pb-sm-5 pb-3 mb-4">
+             <div class="swiper-wrapper">
+                @forelse($newArrivalsProducts as $product)
+                   @include('frontend.partials.home-product-slide', ['product' => $product, 'showNewBadge' => true])
+                @empty
+                   <div class="swiper-slide">
+                      <div class="productItem text-center py-5">
+                         <p class="mb-0 text-muted">No new arrivals available yet.</p>
+                      </div>
+                   </div>
+                @endforelse
+             </div>
+             <div class="swiper-pagination"></div>
+          </div>
+
+          <div class="text-center">
+             <a href="{{ route('product.listing', ['filter' => 'new_arrival']) }}" class="ctaBtn">View All</a>
+          </div>
+       </div>
+    </section>
+
+    @if($specialOffer)
+    <section class="offerSection overflow-hidden">
+    
+        <div class="parallax"
+            style="
+                background-image:url('{{ $specialOffer->image_url ?? asset('frontend/assets/images/offerImg.jpg') }}');
+                {{ $specialOffer->bg_color ? 'background-color:'.$specialOffer->bg_color.';' : '' }}
+            ">
+        </div>
+    
+        <div class="container">
+    
+            <div class="row offerContent position-relative z-3">
+    
+                <div class="col-xl-4 col-lg-6 col-sm-6 col-9 animateThis slideRight">
+    
+                    @if($specialOffer->badge_text)
+                        <div class="txtGold sectSubTxt fw-medium mb-3">
+                            {{ $specialOffer->badge_text }}
+                        </div>
+                    @endif
+    
+                    <h2 class="sectTitle titleFont mb-4"
+                        style="color:{{ $specialOffer->text_color ?? '#fff' }}">
+                        {{ $specialOffer->title }}
+                    </h2>
+
+                    @if($specialOffer->subtitle)
+                        <p class="mb-3 fw-medium"
+                           style="color:{{ $specialOffer->text_color ?? '#fff' }};">
+                            {{ $specialOffer->subtitle }}
+                        </p>
+                    @endif
+    
+                    @if($specialOffer->description)
+                        <p class="offerTxt lh-lg mb-4"
+                           style="color:{{ $specialOffer->text_color ?? '#fff' }};">
+                            {{ $specialOffer->description }}
+                        </p>
+                    @endif
+    
+                    @if($specialOffer->button_link)
+                        <a href="{{ $specialOffer->button_link }}"
+                           class="ctaBtn">
+                            {{ $specialOffer->button_text }}
+                        </a>
+                    @endif
+    
+                </div>
+    
+            </div>
+    
+            @if(!empty($specialOffer->features))
+                <div class="row justify-content-between g-md-0 gx-3 gy-4 py-xl-5 py-md-4 pb-4 mt-0 border-top border-white text-white position-relative z-2"
+                    style="--bs-border-opacity:.5;">
+    
+                    @foreach($specialOffer->features as $feature)
+    
+                        <div class="col-md-auto col-6 py-1">
+    
+                            <div class="uspItem d-flex flex-lg-row flex-md-column flex-sm-row flex-column gap-3 align-items-center">
+    
+                                <div class="col-auto">
+    
+                                    @if(!empty($feature['icon']))
+                                        {!! $feature['icon'] !!}
+                                    @endif
+    
+                                </div>
+    
+                                <div class="col text-lg-start text-md-center text-sm-start text-center">
+    
+                                    <strong class="d-block fw-bold text-uppercase lh-lg">
+                                        {{ $feature['title'] ?? '' }}
+                                    </strong>
+    
+                                    {{ $feature['description'] ?? $feature['text'] ?? '' }}
+    
+                                </div>
+    
+                            </div>
+    
+                        </div>
+    
+                        @if(!$loop->last)
+                            <div class="col-auto vr border-white d-none d-md-block"></div>
+                        @endif
+    
+                    @endforeach
+    
+                </div>
+            @endif
+    
+        </div>
+    
+    </section>
+    @endif
+
+    <section class="py-md-5 py-4 overflow-hidden bgGray">
+       <div class="container py-4 animateThis slideTop">
+          <h2 class="sectTitle text-center mb-3">Watch lovers, loves us too!</h2>
+          <div class="text-center sectSubTxt mb-5">Read their sweet stories about our timepieces and heartwarming service.</div>
+
+          @if(($homeTestimonials ?? collect())->isNotEmpty())
+          <div class="swiper pb-sm-4 pb-3 testimSwiper" data-slides="{{ $homeTestimonials->count() }}">
+             <div class="swiper-wrapper">
+                @foreach($homeTestimonials as $testimonial)
+                   @php
+                      $testimonialRating = (float) ($testimonial->rating ?? 0);
+                      $testimonialRatingClass = match (true) {
+                         $testimonialRating >= 4.75 => 'star5',
+                         $testimonialRating >= 4.25 => 'star4h',
+                         $testimonialRating >= 3.75 => 'star4',
+                         $testimonialRating >= 3.25 => 'star3h',
+                         $testimonialRating >= 2.75 => 'star3',
+                         $testimonialRating >= 2.25 => 'star2h',
+                         $testimonialRating >= 1.75 => 'star2',
+                         $testimonialRating >= 1.25 => 'star1h',
+                         $testimonialRating >= 0.75 => 'star1',
+                         default => 'star0',
+                      };
+                      $avatarUrl = optional($testimonial->user)->avatar_url
+                         ?? asset('backend/assets/images/pngtree-default-male-avatar-png-image_2811083.jpg');
+                   @endphp
+                   <div class="swiper-slide">
+                      <div class="testimItem p-md-5 p-sm-4 p-3 d-flex flex-column gap-4 h-100">
+                         <div class="ti_rating">
+                            <div class="ratingBox"><div class="ratedStars {{ $testimonialRatingClass }}"></div></div>
+                         </div>
+                         <div class="ti_review">
+                            <p class="mb-0">{{ $testimonial->review }}</p>
+                         </div>
+                         <div class="ti_user pt-4 d-flex align-items-center gap-3 mt-auto">
+                            <div class="ti_userImg rounded-circle overflow-hidden flex-shrink-0">
+                               <img src="{{ $avatarUrl }}" alt="{{ $testimonial->user->name ?? 'Customer' }}" class="w-100 h-100" style="object-fit:cover;">
+                            </div>
+                            <div class="ti_userInfo">
+                               <strong class="d-block fw-bold">{{ $testimonial->user->name ?? 'Customer' }}</strong>
+                               <small>
+                                  @if($testimonial->product)
+                                     {{ \Illuminate\Support\Str::limit($testimonial->product->name, 40) }}
+                                  @else
+                                     Verified Buyer
+                                  @endif
+                               </small>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                @endforeach
+             </div>
+             <div class="swiper-pagination"></div>
+          </div>
+          @else
+          <div class="text-center text-secondary py-4">Customer reviews will appear here once approved from Admin → Reviews.</div>
+          @endif
+       </div>
+    </section>
+
+ </main>
+@endsection

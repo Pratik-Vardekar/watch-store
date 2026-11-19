@@ -1,0 +1,135 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Brand;
+use Illuminate\Http\Request;
+
+class BrandController extends Controller
+{
+    public function index()
+    {
+        $brands = Brand::orderBy('position')->orderBy('id')->get();
+
+        return view('admin.brand.index', compact('brands'));
+    }
+
+    public function create()
+    {
+        return view('admin.brand.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name'        => 'required|string|max:255',
+            'logo'        => 'required|image|mimes:jpg,jpeg,png,webp',
+            'description' => 'nullable|string',
+            'link'        => 'nullable',
+            'status'      => 'required|boolean',
+        ]);
+
+        $logo = '';
+
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $logo = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(base_path('backend/assets/images/brands'), $logo);
+        }
+
+        $nextPosition = (int) Brand::max('position') + 1;
+
+        Brand::create([
+            'name'        => $request->name,
+            'logo'        => $logo,
+            'description' => $request->description, // allow nullable
+            'link'        => $request->link,
+            'position'    => $nextPosition,
+            'status'      => $request->status,
+        ]);
+
+        return redirect()->route('brands.index')
+            ->with('success', 'Brand created successfully.');
+    }
+
+    public function edit($id)
+    {
+        $brand = Brand::findOrFail($id);
+
+        return view('admin.brand.edit', compact('brand'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $brand = Brand::findOrFail($id);
+
+        $request->validate([
+            'name'        => 'sometimes|required|string|max:255',
+            'logo'        => 'nullable|image|mimes:jpg,jpeg,png,webp',
+            'description' => 'nullable|string',
+            'link'        => 'nullable',
+            'status'      => 'nullable|boolean',
+        ]);
+
+        $logo = $brand->logo;
+
+        if ($request->hasFile('logo')) {
+            if ($brand->logo && file_exists(base_path('backend/assets/images/brands/' . $brand->logo))) {
+                unlink(base_path('backend/assets/images/brands/' . $brand->logo));
+            }
+
+            $file = $request->file('logo');
+            $logo = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(base_path('backend/assets/images/brands'), $logo);
+        }
+
+        $brand->update([
+            'name'        => $request->input('name', $brand->name),
+            'logo'        => $logo,
+            'description' => $request->has('description') ? $request->description : $brand->description,
+            'link'        => $request->has('link') ? $request->link : $brand->link,
+            'status'      => $request->has('status') ? $request->status : $brand->status,
+        ]);
+
+        return redirect()->route('brands.index')
+            ->with('success', 'Brand updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $brand = Brand::findOrFail($id);
+
+        if ($brand->logo && file_exists(base_path('backend/assets/images/brands/' . $brand->logo))) {
+            unlink(base_path('backend/assets/images/brands/' . $brand->logo));
+        }
+
+        $brand->delete();
+
+        return redirect()->route('brands.index')
+            ->with('success', 'Brand deleted successfully.');
+    }
+
+    /**
+     * Update brand display order (drag & drop).
+     */
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'orders'            => 'required|array',
+            'orders.*.id'       => 'required|integer|exists:brands,id',
+            'orders.*.position' => 'required|integer|min:1',
+        ]);
+
+        foreach ($request->orders as $item) {
+            Brand::where('id', $item['id'])->update([
+                'position' => $item['position'],
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Brand order updated successfully',
+        ]);
+    }
+}

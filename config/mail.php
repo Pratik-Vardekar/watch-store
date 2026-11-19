@@ -115,4 +115,12 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Order Notification
+    |--------------------------------------------------------------------------
+    */
+
+    'admin_order_email' => env('ADMIN_ORDER_EMAIL'),
+
 ];

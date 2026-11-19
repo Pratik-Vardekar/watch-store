@@ -104,7 +104,7 @@
                             <th>User</th>
                             <th>Phone</th>
                             <th>Address</th>
-                            <th>Type</th>
+                            <!-- <th>Type</th> removed -->
                             <th>Default</th>
                             <th>Status</th>
                             <th>Created</th>
@@ -194,17 +194,7 @@
 
 </td>
 
-                            
-
-                            <td>
-
-                                <span class="badge bg-info">
-
-                                    {{ ucfirst($address->type) }}
-
-                                </span>
-
-                            </td>
+                            <!-- Removed Type column -->
 
                             <td>
 
@@ -272,7 +262,7 @@
 
                         <tr>
 
-                            <td colspan="9"
+                            <td colspan="8"
                                 class="text-center py-4">
 
                                 No Addresses Found

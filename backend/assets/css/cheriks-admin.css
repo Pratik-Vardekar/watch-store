@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap');
+
+:root {
+   --cheriks-orange: #2A9F43;
+   --cheriks-purple: #d0c9e2;
+   --cheriks-purple-dark: #b3adc3;
+   --cheriks-purple-light: #a396b9;
+   --cheriks-red: #fc3335;
+   --cheriks-red-dark: #e82a2c;
+   --cheriks-purple-subtle: #ebe2ff;
+   --cheriks-red-subtle: #fee7ed;
+
+   --theme-primary: #7846f0;
+   --theme-primary-rgb: 120, 70, 240;
+   --theme-primary-text-emphasis: #6238c9;
+   --theme-primary-bg-subtle: #ebe2ff;
+   --theme-primary-border-subtle: #c9b5f9;
+}
+
+body.cheriks-admin {
+   --bs-success: var(--theme-primary);
+   --bs-success-rgb: var(--theme-primary-rgb);
+   --bs-success-text-emphasis: var(--theme-primary-text-emphasis);
+   --bs-success-bg-subtle: var(--theme-primary-bg-subtle);
+   --bs-success-border-subtle: var(--theme-primary-border-subtle);
+   --theme-sidenav-item-hover-bg: transparent;
+}
+
+body.cheriks-admin,
+body.cheriks-admin .side-nav,
+body.cheriks-admin .app-topbar,
+body.cheriks-admin .content-page,
+body.cheriks-admin .page-title-head,
+body.cheriks-admin .card,
+body.cheriks-admin .btn,
+body.cheriks-admin .form-control {
+   font-family: 'Baloo 2', cursive, sans-serif !important;
+}
+
+html[data-topbar-color=light] body.cheriks-admin {
+   --theme-topbar-item-hover-color: var(--cheriks-purple);
+}
+
+body.cheriks-admin .btn-primary,
+body.cheriks-admin .sidenav-toggle-button.btn-primary {
+   background-color: #eb6c16 !important;
+   border-color: #eb6c16 !important;
+   color: #fff !important;
+}
+
+body.cheriks-admin .btn-primary:hover,
+body.cheriks-admin .btn-primary:focus,
+body.cheriks-admin .btn-primary:active,
+body.cheriks-admin .sidenav-toggle-button.btn-primary:hover,
+body.cheriks-admin .sidenav-toggle-button.btn-primary:focus,
+body.cheriks-admin .sidenav-toggle-button.btn-primary:active {
+   background-color: #c85a10 !important;
+   border-color: #c85a10 !important;
+   color: #fff !important;
+}
+
+body.cheriks-admin .side-nav > .side-nav-item.active > a,
+body.cheriks-admin .side-nav > .side-nav-item.active > button {
+   background: transparent !important;
+   color: #fff !important;
+   border-radius: .5rem !important;
+   font-weight: 700;
+}
+
+body.cheriks-admin .side-nav > .side-nav-item.active > a .menu-icon,
+body.cheriks-admin .side-nav > .side-nav-item.active > button .menu-icon {
+   color: #fff !important;
+}
+
+/* Sidebar menu links: no background on hover/focus (incl. active item) */
+body.cheriks-admin .sidenav-menu .side-nav > .side-nav-item:hover > .side-nav-link,
+body.cheriks-admin .sidenav-menu .side-nav > .side-nav-item > .side-nav-link:hover,
+body.cheriks-admin .sidenav-menu .side-nav > .side-nav-item > .side-nav-link:focus,
+body.cheriks-admin .sidenav-menu .side-nav > .side-nav-item > .side-nav-link:active,
+body.cheriks-admin .sidenav-menu .side-nav .sub-menu .side-nav-link:hover,
+body.cheriks-admin .sidenav-menu .side-nav .sub-menu .side-nav-link:focus,
+body.cheriks-admin .sidenav-menu .side-nav .sub-menu .side-nav-link:active,
+html[data-sidenav-size=condensed] body.cheriks-admin .sidenav-menu .side-nav > .side-nav-item:hover > .side-nav-link {
+   background: transparent !important;
+   background-color: transparent !important;
+   box-shadow: none !important;
+}
+body.cheriks-admin .page-main-title {
+   color: var(--cheriks-purple);
+   font-weight: 700;
+}
+
+body.cheriks-admin .breadcrumb-item.active {
+   color: var(--cheriks-purple);
+}
+
+body.cheriks-admin .breadcrumb-item a {
+   color: var(--cheriks-red);
+}
+
+body.cheriks-admin .content-page {
+   background: #faf9ff !important;
+}
+
+body.cheriks-admin .transition-card {
+   border-radius: 1rem !important;
+   border-color: var(--cheriks-purple-subtle) !important;
+}
+
+body.cheriks-admin .transition-card:hover {
+   border-color: var(--cheriks-red) !important;
+   box-shadow: 0 .5rem 1.25rem rgba(120, 70, 240, .15) !important;
+}
+
+body.cheriks-admin .footer {
+   border-top: 2px solid var(--cheriks-purple-subtle);
+}
+
+body.cheriks-admin .footer a {
+   color: var(--cheriks-purple) !important;
+}
+
+body.cheriks-admin .text-cheriks-purple { color: var(--cheriks-purple) !important; }
+body.cheriks-admin .text-cheriks-red { color: var(--cheriks-red) !important; }
+body.cheriks-admin .bg-cheriks-purple-subtle { background-color: var(--cheriks-purple-subtle) !important; }
+body.cheriks-admin .bg-cheriks-red-subtle { background-color: var(--cheriks-red-subtle) !important; }
+body.cheriks-admin .badge-cheriks-purple {
+   background-color: var(--cheriks-purple-subtle) !important;
+   color: var(--cheriks-purple) !important;
+}
+body.cheriks-admin .badge-cheriks-red {
+   background-color: var(--cheriks-red-subtle) !important;
+   color: var(--cheriks-red) !important;
+}
+
+#toastContainer {
+   top: 1rem;
+   right: 1rem;
+   left: auto;
+   transform: none;
+   width: min(380px, calc(100% - 2rem));
+   padding: 0;
+   z-index: 11000;
+}
+
+.cheriks-toast {
+   width: 100%;
+   border: 0;
+   border-radius: .75rem;
+   overflow: hidden;
+   box-shadow: 0 8px 24px rgba(43, 42, 42, .18);
+   animation: cheriksToastIn .35s ease;
+}
+
+.cheriks-toast .toast-inner {
+   display: flex;
+   align-items: center;
+   gap: .75rem;
+   padding: .85rem 1rem;
+   color: #fff;
+   font-weight: 600;
+   font-size: 1rem;
+   background: linear-gradient(90deg, #7846f0 0%, #9a6df7 100%);
+}
+
+.cheriks-toast-error .toast-inner {
+   background: linear-gradient(90deg, var(--cheriks-red) 0%, var(--cheriks-red-dark) 100%);
+}
+
+.cheriks-toast-icon {
+   width: 2.25rem;
+   height: 2.25rem;
+   border-radius: .35rem;
+   background: #fff;
+   padding: .2rem;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   flex-shrink: 0;
+   overflow: hidden;
+}
+
+.cheriks-toast-icon img {
+   width: 100%;
+   height: auto;
+   object-fit: contain;
+   display: block;
+}
+
+.cheriks-toast-body { flex: 1; line-height: 1.35; }
+
+.cheriks-toast-close {
+   width: 1.75rem;
+   height: 1.75rem;
+   border: 0;
+   border-radius: 50%;
+   background: rgba(255, 255, 255, .2);
+   color: #fff;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   flex-shrink: 0;
+   font-size: 1.1rem;
+   cursor: pointer;
+}
+
+@keyframes cheriksToastIn {
+   from { opacity: 0; transform: translateX(16px); }
+   to { opacity: 1; transform: translateX(0); }
+}

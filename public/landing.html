@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Watch Store — Grand Launch on 11th October 12:00 AM</title>
+    <meta name="description" content="The Watch Store is launching on October 11, 2026 at 12:00 AM. Discover curated Swiss precision timepieces and luxury watches.">
+    
+    <!-- Website Fonts (Manrope from site's style.css) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* The Watch Store Official Theme Colors */
+            --goldColor: #bf9a7c;
+            --goldLight: #dfbe9e;
+            --goldGlow: rgba(191, 154, 124, 0.35);
+            --redColor: #ee0000;
+            --redHover: #cc0000;
+            --darkBg: #0b0d11;
+            --cardBg: rgba(18, 22, 29, 0.78);
+            --cardBgHover: rgba(26, 32, 44, 0.9);
+            --textLight: #f8fafc;
+            --textMuted: #94a3b8;
+            --borderGold: rgba(191, 154, 124, 0.28);
+            --borderSubtle: rgba(255, 255, 255, 0.08);
+            --fontFamily: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+            --fontDisplay: 'Cinzel', serif;
+            --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--darkBg);
+            color: var(--textLight);
+            font-family: var(--fontFamily);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 50% 10%, rgba(191, 154, 124, 0.16) 0%, transparent 60%),
+                radial-gradient(circle at 85% 80%, rgba(238, 0, 0, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 10% 85%, rgba(18, 22, 29, 0.9) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Subtle Hero Watch Mechanism Background Overlay */
+        .hero-bg-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('../frontend/assets/images/heroBanner_1.jpg'), url('frontend/assets/images/heroBanner_1.jpg');
+            background-size: cover;
+            background-position: center right;
+            opacity: 0.14;
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: luminosity;
+        }
+
+        /* Ambient Glow Pulse */
+        .ambient-glow {
+            position: fixed;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 650px;
+            height: 650px;
+            background: radial-gradient(circle, var(--goldGlow) 0%, rgba(11, 13, 17, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(50px);
+            animation: pulseAura 9s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseAura {
+            0% { transform: translate(-50%, -50%) scale(0.92); opacity: 0.55; }
+            100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        /* Top Header Strip */
+        .header-top-strip {
+            background: #000000;
+            border-bottom: 1px solid var(--borderSubtle);
+            padding: 8px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            color: #cbd5e1;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-top-strip .highlight {
+            color: var(--goldLight);
+            font-weight: 600;
+        }
+
+        /* Navigation / Branding Header */
+        header {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.4rem 8%;
+            border-bottom: 1px solid var(--borderGold);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(11, 13, 17, 0.75);
+        }
+
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 18px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 16px var(--goldGlow);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .logo-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), 0 0 24px rgba(238, 0, 0, 0.35);
+        }
+
+        .brand-logo-img {
+            height: 48px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .launch-pill {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 8px 18px;
+            border: 1px solid var(--borderGold);
+            border-radius: 50px;
+            color: var(--goldLight);
+            background: rgba(191, 154, 124, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pulse-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--redColor);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--redColor);
+            animation: pulseDot 1.6s infinite ease-in-out;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.7); }
+        }
+
+        /* Main Hero Section */
+        main {
+            position: relative;
+            z-index: 5;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3.5rem 1.5rem 4.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            width: 100%;
+        }
+
+        .hero-launch-banner {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 18px;
+            border-radius: 30px;
+            background: rgba(238, 0, 0, 0.12);
+            border: 1px solid rgba(238, 0, 0, 0.3);
+            color: #ff6b6b;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.6rem;
+        }
+
+        .hero-title {
+            font-family: var(--fontFamily);
+            font-size: clamp(2.3rem, 5.5vw, 4.2rem);
+            font-weight: 800;
+            line-height: 1.16;
+            letter-spacing: -0.8px;
+            margin-bottom: 1.2rem;
+            background: linear-gradient(180deg, #ffffff 30%, #e2e8f0 70%, var(--goldLight) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            max-width: 950px;
+        }
+
+        .hero-title span {
+            color: var(--goldColor);
+            -webkit-text-fill-color: var(--goldLight);
+            font-family: var(--fontDisplay);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.02rem, 1.8vw, 1.2rem);
+            line-height: 1.7;
+            color: var(--textMuted);
+            max-width: 720px;
+            margin: 0 auto 1.4rem;
+            font-weight: 400;
+        }
+
+        .exact-date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(191, 154, 124, 0.15);
+            border: 1px solid var(--goldColor);
+            color: var(--goldLight);
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 8px 24px;
+            border-radius: 50px;
+            margin-bottom: 3.2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .exact-date-badge svg {
+            color: var(--redColor);
+        }
+
+        /* Countdown Grid */
+        .countdown-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.3rem;
+            max-width: 780px;
+            width: 100%;
+            margin: 0 auto 3.6rem;
+        }
+
+        .time-box {
+            background: var(--cardBg);
+            border: 1px solid var(--borderGold);
+            border-radius: 18px;
+            padding: 2rem 1rem;
+            position: relative;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .time-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--goldColor), var(--redColor), transparent);
+        }
+
+        .time-box:hover {
+            transform: translateY(-6px);
+            border-color: var(--goldLight);
+            background: var(--cardBgHover);
+            box-shadow: 0 22px 48px rgba(0, 0, 0, 0.65), 0 0 28px var(--goldGlow);
+        }
+
+        .time-number {
+            font-family: var(--fontDisplay);
+            font-size: clamp(2.4rem, 4.8vw, 3.6rem);
+            font-weight: 700;
+            color: #ffffff;
+            display: block;
+            line-height: 1;
+            margin-bottom: 0.6rem;
+            background: linear-gradient(180deg, #ffffff 40%, var(--goldLight) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .time-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 2.4px;
+            text-transform: uppercase;
+            color: var(--goldColor);
+        }
+
+        /* VIP Subscription Form */
+        .subscribe-wrap {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .subscribe-form {
+            display: flex;
+            background: rgba(18, 22, 29, 0.9);
+            border: 1px solid var(--borderGold);
+            border-radius: 60px;
+            padding: 8px;
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .subscribe-form:focus-within {
+            border-color: var(--goldLight);
+            box-shadow: 0 18px 44px rgba(0, 0, 0, 0.7), 0 0 28px var(--goldGlow);
+        }
+
+        .subscribe-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 0 1.6rem;
+            color: #ffffff;
+            font-size: 0.98rem;
+            font-family: var(--fontFamily);
+        }
+
+        .subscribe-input::placeholder {
+            color: #64748b;
+        }
+
+        .subscribe-btn {
+            background: linear-gradient(135deg, var(--redColor) 0%, #b80000 100%);
+            border: none;
+            outline: none;
+            color: #ffffff;
+            font-family: var(--fontFamily);
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 1.05rem 2.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 6px 20px rgba(238, 0, 0, 0.35);
+            white-space: nowrap;
+        }
+
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #ff1a1a 0%, var(--redColor) 100%);
+            box-shadow: 0 10px 28px rgba(238, 0, 0, 0.55);
+        }
+
+        .form-feedback {
+            margin-top: 1.2rem;
+            font-size: 0.94rem;
+            color: #34d399;
+            min-height: 24px;
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+            font-weight: 500;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Pillars / Brand Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+            width: 100%;
+            margin-top: 5rem;
+            text-align: left;
+        }
+
+        .feature-card {
+            background: var(--cardBg);
+            border: 1px solid var(--borderSubtle);
+            border-radius: 16px;
+            padding: 2.2rem 1.8rem;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .feature-card:hover {
+            border-color: var(--borderGold);
+            background: var(--cardBgHover);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon-wrap {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(191, 154, 124, 0.12);
+            border: 1px solid var(--borderGold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.4rem;
+            color: var(--goldLight);
+        }
+
+        .feature-card:hover .feature-icon-wrap {
+            background: rgba(238, 0, 0, 0.12);
+            border-color: rgba(238, 0, 0, 0.35);
+            color: var(--redColor);
+        }
+
+        .feature-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.2px;
+        }
+
+        .feature-desc {
+            font-size: 0.9rem;
+            color: var(--textMuted);
+            line-height: 1.65;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 10;
+            border-top: 1px solid var(--borderSubtle);
+            padding: 2.2rem 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: #64748b;
+            background: rgba(11, 13, 17, 0.85);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--goldLight);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+                margin-top: 3.5rem;
+            }
+
+            header {
+                padding: 1.2rem 6%;
+            }
+
+            .header-top-strip {
+                display: none;
+            }
+
+            footer {
+                padding: 1.8rem 6%;
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .countdown-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.85rem;
+            }
+
+            .time-box {
+                padding: 1.5rem 0.8rem;
+            }
+
+            .subscribe-form {
+                flex-direction: column;
+                border-radius: 20px;
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .subscribe-input {
+                padding: 0.9rem 1rem;
+                text-align: center;
+            }
+
+            .subscribe-btn {
+                width: 100%;
+                border-radius: 12px;
+            }
+
+            .logo-container {
+                padding: 6px 14px;
+            }
+
+            .brand-logo-img {
+                height: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-bg-texture" aria-hidden="true"></div>
+    <div class="ambient-glow" aria-hidden="true"></div>
+
+    <!-- Top Announcement Strip -->
+    <div class="header-top-strip">
+        <div>Official Grand Opening Announcement</div>
+        <div>Launching: <span class="highlight">11th October 2026 • 12:00 AM</span></div>
+    </div>
+
+    <!-- Header with Official Logo -->
+    <header>
+        <a href="#" class="logo-container" aria-label="The Watch Store">
+            <img 
+                src="../frontend/assets/images/tws_logo.png" 
+                onerror="if(!this.dataset.retried){this.dataset.retried=1;this.src='frontend/assets/images/tws_logo.png';}" 
+                alt="The Watch Store Logo" 
+                class="brand-logo-img"
+            >
+        </a>
+        <div class="launch-pill" id="launch-badge">
+            <span class="pulse-indicator"></span>
+            Launching 11th Oct
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="hero-launch-banner">
+            ✦ Precision Horology Arrives
+        </div>
+
+        <h1 class="hero-title">
+            Something Extraordinary Is <span>Ticking</span>
+        </h1>
+
+        <p class="hero-subtitle">
+            The premier digital destination for certified luxury watches, Swiss chronographs, and rare iconic collections is about to open its doors.
+        </p>
+
+        <!-- Exact Target Launch Date Callout -->
+        <div class="exact-date-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Official Launch: 11th October 2026 at 12:00 AM (Midnight)
+        </div>
+
+        <!-- Real-Time Countdown to 11th Oct 12:00 AM -->
+        <div class="countdown-container" id="countdown-timer" role="timer" aria-live="polite">
+            <div class="time-box">
+                <span class="time-number" id="days">00</span>
+                <span class="time-label">Days</span>
+            </div>
+            <div class="time-box">
+                <span class="time-number" id="hours">00</span>
+                <span class="time-label">Hours</span>
+            </div>
+            <div class="time-box">
+                <span class="time-number" id="minutes">00</span>
+                <span class="time-label">Minutes</span>
+            </div>
+            <div class="time-box">
+                <span class="time-number" id="seconds">00</span>
+                <span class="time-label">Seconds</span>
+            </div>
+        </div>
+
+        <!-- VIP Access Form -->
+        <div class="subscribe-wrap">
+            <form class="subscribe-form" id="vip-form" onsubmit="handleNotify(event)">
+                <input 
+                    type="email" 
+                    id="email-input" 
+                    class="subscribe-input" 
+                    placeholder="Enter email to get notified on launch..." 
+                    required 
+                    autocomplete="email"
+                >
+                <button type="submit" class="subscribe-btn" id="submit-btn">
+                    Notify Me
+                </button>
+            </form>
+            <div class="form-feedback" id="feedback-msg">
+                ✦ You are on the VIP guest list! We will notify you precisely at 12:00 AM on 11th October.
+            </div>
+        </div>
+
+        <!-- Pillars Grid with Brand Color Touches -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="7"></circle>
+                        <polyline points="12 9 12 12 13.5 13.5"></polyline>
+                        <path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Iconic Watch Collections</h3>
+                <p class="feature-desc">Carefully curated timepieces from world-renowned master watchmakers and independent ateliers.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">100% Certified Authentic</h3>
+                <p class="feature-desc">Every watch is verified by certified horological specialists and comes with official warranty protection.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">White-Glove Delivery</h3>
+                <p class="feature-desc">Direct, insured courier service and personalized consultation for every connoisseur.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div>&copy; <span id="current-year">2026</span> The Watch Store. All rights reserved.</div>
+        <ul class="footer-links">
+            <li><a href="#">Privilege Club</a></li>
+            <li><a href="#">Contact Concierge</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+        </ul>
+    </footer>
+
+    <!-- Countdown Logic targeting October 11, 2026 at 12:00 AM -->
+    <script>
+        // Exact target: October 11, 2026 at 12:00 AM (00:00:00 midnight)
+        const targetLaunchDate = new Date(2026, 9, 11, 0, 0, 0); // Month is 0-indexed (9 = October)
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetLaunchDate.getTime() - now;
+
+            if (difference <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                const badge = document.getElementById('launch-badge');
+                if (badge) badge.innerHTML = '<span class="pulse-indicator" style="background:#10b981;box-shadow:0 0 10px #10b981;"></span> Now Live!';
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        // Initialize and tick every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Footer year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // VIP email notify submission
+        function handleNotify(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('email-input');
+            const submitBtn = document.getElementById('submit-btn');
+            const feedbackMsg = document.getElementById('feedback-msg');
+
+            if (!emailInput.value) return;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enrolling...';
+            submitBtn.style.opacity = '0.75';
+
+            setTimeout(() => {
+                submitBtn.textContent = 'Enrolled ✓';
+                submitBtn.style.background = '#10b981';
+                submitBtn.style.boxShadow = '0 6px 20px rgba(16, 185, 129, 0.4)';
+                feedbackMsg.style.display = 'block';
+                emailInput.value = '';
+
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Notify Me';
+                    submitBtn.style.background = '';
+                    submitBtn.style.boxShadow = '';
+                    submitBtn.style.opacity = '1';
+                }, 4000);
+            }, 600);
+        }
+    </script>
+</body>
+</html>

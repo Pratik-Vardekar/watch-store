@@ -2,17 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>@yield('title', 'Admin Dashboard') |  - Agriwow</title>
+    <title>@yield('title', 'Admin Dashboard') | The Watch Store</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Paces is a modern, responsive admin dashboard available on ThemeForest." />
-    <meta name="keywords" content="Paces, admin dashboard, Bootstrap 5 admin, CRM dashboard" />
-    <meta name="author" content="Coderthemes" />
+    <meta name="description" content="The Watch Store - Admin Panel" />
+    <meta name="keywords" content="Watches, admin, CMS, dashboard" />
+    <meta name="author" content="The Watch Store" />
 
     <!-- App favicon -->
-    <link rel="icon" href="{{ asset('backend/assets/images/favicon.jpg') }}" />
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('backend/assets/images/favicon.jpg') }}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('backend/assets/images/favicon.jpg') }}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/assets/images/favicon.jpg') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('frontend/assets/images/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('frontend/assets/images/favicon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('frontend/assets/images/favicon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('frontend/assets/images/favicon.png') }}">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
     <!-- Vector Maps css -->
     <link href="{{ asset('backend/assets/plugins/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -26,10 +28,13 @@
     <!-- App css -->
     <link id="app-style" href="{{ asset('backend/assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
 
+    <!-- Watch brand overrides -->
+    <link href="{{ asset('backend/assets/css/watch-admin.css') }}?v={{ @filemtime(base_path('backend/assets/css/watch-admin.css')) ?: time() }}" rel="stylesheet" type="text/css" />
+
     @stack('styles')
 </head>
 
-<body style="background-color: #ffffff;">
+<body class="watch-admin">
     <!-- Begin page -->
     <div class="wrapper">
         @include('admin.partials.header')
@@ -86,10 +91,11 @@
 
     Swal.fire({
         icon: 'success',
+        iconColor: '#198754',
         title: 'Success',
         text: '{{ session('success') }}',
         timer: 2000,
-        showConfirmButton: false
+        showConfirmButton: false,
     });
 
 </script>

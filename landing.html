@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Watch Store — Something Timeless Is Coming Soon</title>
+    <meta name="description"
+        content="Discover precision horology and iconic luxury timepieces. The Watch Store is launching soon. Join our exclusive VIP list for early access.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --bg-card: rgba(18, 22, 32, 0.72);
+            --bg-card-hover: rgba(28, 34, 48, 0.85);
+            --gold-primary: #d4af37;
+            --gold-light: #f5df88;
+            --gold-dark: #997d26;
+            --gold-glow: rgba(212, 175, 55, 0.25);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-gold: #e2c067;
+            --border-glass: rgba(212, 175, 55, 0.18);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-image:
+                radial-gradient(circle at 50% 15%, rgba(212, 175, 55, 0.12) 0%, transparent 55%),
+                radial-gradient(circle at 90% 85%, rgba(197, 160, 89, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 10% 90%, rgba(20, 26, 40, 0.8) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Ambient Background Mesh & Watch Hands Animation */
+        .ambient-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.07) 0%, rgba(10, 12, 16, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(40px);
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                transform: translate(-50%, -50%) scale(0.9);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.15);
+                opacity: 1;
+            }
+        }
+
+        /* Header Navigation */
+        header {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2.2rem 8%;
+            border-bottom: 1px solid var(--border-subtle);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .logo-symbol {
+            width: 44px;
+            height: 44px;
+            border: 1.5px solid var(--gold-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 15px var(--gold-glow);
+            transition: var(--transition);
+        }
+
+        .logo-symbol::after {
+            content: '';
+            width: 14px;
+            height: 1.5px;
+            background: var(--gold-primary);
+            position: absolute;
+            transform: rotate(-45deg);
+            transform-origin: left center;
+            left: 21px;
+            top: 21px;
+        }
+
+        .logo-symbol::before {
+            content: '';
+            width: 9px;
+            height: 1.5px;
+            background: var(--gold-light);
+            position: absolute;
+            transform: rotate(45deg);
+            transform-origin: left center;
+            left: 21px;
+            top: 21px;
+        }
+
+        .brand-logo:hover .logo-symbol {
+            transform: rotate(90deg);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+        }
+
+        .brand-title {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ffffff 40%, var(--gold-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-badge {
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border: 1px solid var(--border-glass);
+            border-radius: 100px;
+            color: var(--gold-light);
+            background: rgba(212, 175, 55, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: liveBlink 1.8s infinite;
+        }
+
+        @keyframes liveBlink {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.75);
+            }
+        }
+
+        /* Hero Container */
+        main {
+            position: relative;
+            z-index: 5;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            width: 100%;
+        }
+
+        .hero-tagline {
+            font-family: var(--font-serif);
+            color: var(--gold-primary);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-size: 0.88rem;
+            margin-bottom: 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .hero-tagline::before,
+        .hero-tagline::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary));
+        }
+
+        .hero-tagline::after {
+            background: linear-gradient(90deg, var(--gold-primary), transparent);
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.4rem, 6vw, 4.4rem);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.5px;
+            margin-bottom: 1.4rem;
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 55%, var(--gold-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            max-width: 900px;
+        }
+
+        .hero-description {
+            font-size: clamp(1rem, 1.8vw, 1.18rem);
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 680px;
+            margin: 0 auto 3.2rem;
+            font-weight: 300;
+        }
+
+        /* Chronograph Countdown Display */
+        .countdown-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            max-width: 720px;
+            width: 100%;
+            margin: 0 auto 3.5rem;
+        }
+
+        .time-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 1.8rem 1rem;
+            position: relative;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .time-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+            opacity: 0.7;
+        }
+
+        .time-box:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.45);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px var(--gold-glow);
+        }
+
+        .time-number {
+            font-family: var(--font-serif);
+            font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+            font-weight: 700;
+            color: #ffffff;
+            display: block;
+            line-height: 1;
+            margin-bottom: 0.6rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(180deg, #ffffff 60%, var(--gold-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .time-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--gold-primary);
+        }
+
+        /* VIP Subscription Card */
+        .subscribe-wrap {
+            width: 100%;
+            max-width: 580px;
+            margin: 0 auto;
+        }
+
+        .subscribe-form {
+            display: flex;
+            background: rgba(18, 22, 32, 0.85);
+            border: 1px solid var(--border-glass);
+            border-radius: 60px;
+            padding: 7px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .subscribe-form:focus-within {
+            border-color: var(--gold-primary);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px var(--gold-glow);
+        }
+
+        .subscribe-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 0 1.6rem;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-family: var(--font-sans);
+        }
+
+        .subscribe-input::placeholder {
+            color: #64748b;
+        }
+
+        .subscribe-btn {
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 60%, var(--gold-dark) 100%);
+            border: none;
+            outline: none;
+            color: #0b0d13;
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 0.88rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            white-space: nowrap;
+        }
+
+        .subscribe-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.5);
+            filter: brightness(1.08);
+        }
+
+        .form-feedback {
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            color: #34d399;
+            min-height: 24px;
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Pillars / Luxury Highlights */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+            width: 100%;
+            margin-top: 5rem;
+            text-align: left;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 2.2rem 1.8rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .feature-card:hover {
+            border-color: var(--border-glass);
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.4rem;
+            color: var(--gold-light);
+        }
+
+        .feature-title {
+            font-family: var(--font-serif);
+            font-size: 1.12rem;
+            color: #ffffff;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.5px;
+        }
+
+        .feature-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 10;
+            border-top: 1px solid var(--border-subtle);
+            padding: 2.2rem 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.84rem;
+            color: #64748b;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--gold-light);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+                margin-top: 3.5rem;
+            }
+
+            header {
+                padding: 1.6rem 6%;
+            }
+
+            footer {
+                padding: 1.8rem 6%;
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .countdown-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .time-box {
+                padding: 1.4rem 0.8rem;
+            }
+
+            .subscribe-form {
+                flex-direction: column;
+                border-radius: 20px;
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .subscribe-input {
+                padding: 0.8rem 1rem;
+                text-align: center;
+            }
+
+            .subscribe-btn {
+                width: 100%;
+                border-radius: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ambient-glow" aria-hidden="true"></div>
+
+    <!-- Header Section -->
+    <header>
+        <a href="#" class="brand-logo" aria-label="The Watch Store Homepage">
+            <div class="logo-symbol" aria-hidden="true"></div>
+            <span class="brand-title">The Watch Store</span>
+        </a>
+        <div class="brand-badge">
+            <span class="pulse-dot"></span>
+            Private Launch in Progress
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="hero-tagline">Crafting Timeless Horology</div>
+        <h1 class="hero-title">Something Extraordinary Is In The Making</h1>
+        <p class="hero-description">
+            We are curating an unprecedented collection of Swiss precision chronographs, rare limited editions, and
+            bespoke luxury timepieces. The countdown to our premier digital boutique has begun.
+        </p>
+
+        <!-- Dynamic Countdown Grid -->
+        <div class="countdown-container" id="countdown-timer" role="timer" aria-live="polite">
+            <div class="time-box">
+                <span class="time-number" id="days">24</span>
+                <span class="time-label">Days</span>
+            </div>
+            <div class="time-box">
+                <span class="time-number" id="hours">16</span>
+                <span class="time-label">Hours</span>
+            </div>
+            <div class="time-box">
+                <span class="time-number" id="minutes">42</span>
+                <span class="time-label">Minutes</span>
+            </div>
+            <div class="time-box">
+                <span class="time-number" id="seconds">58</span>
+                <span class="time-label">Seconds</span>
+            </div>
+        </div>
+
+        <!-- VIP Access Subscription Form -->
+        <div class="subscribe-wrap">
+            <form class="subscribe-form" id="vip-form" onsubmit="handleNotify(event)">
+                <input type="email" id="email-input" class="subscribe-input"
+                    placeholder="Enter your email for private invitation..." required autocomplete="email">
+                <button type="submit" class="subscribe-btn" id="submit-btn">
+                    Notify Me
+                </button>
+            </form>
+            <div class="form-feedback" id="feedback-msg">
+                ✦ Thank you! You have been granted priority access to our opening.
+            </div>
+        </div>
+
+        <!-- Luxury Pillar Highlights -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="7"></circle>
+                        <polyline points="12 9 12 12 13.5 13.5"></polyline>
+                        <path
+                            d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Heritage & Modern Horology</h3>
+                <p class="feature-desc">Curated icons from historic Swiss and artisanal independent watchmakers
+                    worldwide.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">100% Certified Authenticity</h3>
+                <p class="feature-desc">Each timepiece undergoes rigorous multi-point inspection by certified master
+                    watchmakers.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">White-Glove Concierge</h3>
+                <p class="feature-desc">Complimentary insured armored courier delivery and bespoke personal advisory
+                    services.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div>&copy; <span id="current-year">2026</span> The Watch Store. All rights reserved.</div>
+        <ul class="footer-links">
+            <li><a href="#">Privilege Club</a></li>
+            <li><a href="#">Concierge</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+        </ul>
+    </footer>
+
+    <!-- Interactive Script (Countdown + VIP Form) -->
+    <script>
+        // Set target launch date (25 days from now)
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + 25);
+        targetDate.setHours(12, 0, 0, 0);
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetDate.getTime() - now;
+
+            if (difference <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        // Run immediately and update every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Dynamic Year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // VIP Submission Handler
+        function handleNotify(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('email-input');
+            const submitBtn = document.getElementById('submit-btn');
+            const feedbackMsg = document.getElementById('feedback-msg');
+
+            if (!emailInput.value) return;
+
+            // Feedback UI
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Joining...';
+            submitBtn.style.opacity = '0.7';
+
+            setTimeout(() => {
+                submitBtn.textContent = 'Joined ✓';
+                submitBtn.style.background = '#10b981';
+                submitBtn.style.color = '#ffffff';
+                feedbackMsg.style.display = 'block';
+                emailInput.value = '';
+
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Notify Me';
+                    submitBtn.style.background = '';
+                    submitBtn.style.color = '';
+                    submitBtn.style.opacity = '1';
+                }, 4000);
+            }, 600);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Brand extends Model
+{
+    protected $fillable = [
+        'name',
+        'logo',
+        'description',
+        'link',
+        'status',
+        'position',
+    ];
+
+    public function getLogoUrlAttribute()
+    {
+        return asset('backend/assets/images/brands/' . $this->logo);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+    public function getDescriptionAttribute()
+    {
+        return $this->description ?? 'This brand has no description yet.';
+    }
+}

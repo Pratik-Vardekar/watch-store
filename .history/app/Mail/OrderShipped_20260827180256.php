@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Mail;
+
+use App\Models\Order;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
+
+class OrderShipped extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public function __construct(public Order $order)
+    {
+        // Load all needed relationships
+        $this->order->loadMissing(['user', 'items.product', 'items.variant', 'addresses']);
+    }
+
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            subject: 'Your Order #' . ($this->order->order_id ?? $this->order->id) . ' Has Been Shipped!',
+        );
+    }
+
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.order_shipped_user',
+        );
+    }
+}

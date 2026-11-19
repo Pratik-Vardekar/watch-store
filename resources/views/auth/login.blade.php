@@ -1,244 +1,133 @@
-@extends('layouts.auth')
+@extends('layouts.front')
 
 @section('title', 'Login')
 
 @section('content')
-<style>
-    body {
-    min-height: 100vh;
-    background: linear-gradient(
-        to right,
-        #b2d76d 0%,
-        #91cd7b 35%,
-        #88e49a 65%,
-        #f1cf8e 100%
-    );
 
-    background-attachment: fixed;
-}
-</style>
+<main class="pageWrapper d-flex">
 
+    <section class="w-100 d-flex position-relative">
 
-<div class="auth-box d-flex align-items-center min-vh-100">
+        <div class="w-100 h-25 position-absolute top-0 bottom-0 m-auto bg-secondary-subtle rounded-0 progress progress-bar-striped progress-bar-animated"></div>
 
-    <div class="container-xxl">
+        <div class="container d-flex py-sm-5 py-4 justify-content-center align-items-center position-relative z-3">
 
-        <div class="row align-items-center justify-content-center">
+            <div class="loginWrap bg-white shadow-lg d-flex flex-wrap justify-content-between rounded-3 overflow-hidden">
 
-            <div class="col-xl-10">
+                <div class="col-md-6 col-12 px-md-5 px-4 py-4 align-self-center">
+                    <h1 class="sectTitle mb-4 d-inline-flex align-items-center gap-3">Login</h1>
 
-                <div class="card border-0 shadow-lg overflow-hidden">
+                    <form method="POST" action="{{ route('login') }}" class="row g-4 formFormat">
+                        @csrf
 
-                    <div class="row justify-content-between g-0">
-
-                        <!-- Left Side -->
-                        <div class="col-lg-6">
-
-                            <div class="card-body p-4 p-xl-5">
-
-                                <div class="auth-brand text-center mb-4 position-relative">
-
-                                    <a href="{{ url('/') }}" class="logo-dark">
-
-                                        <img src="{{ asset('backend/assets/images/logo.png') }}"
-                                            alt="dark logo"
-                                            style="max-height:70px;" />
-
-                                    </a>
-
-                                    <h4 class="fw-bold text-dark mt-4">
-                                        Great to see you here 👋
-                                    </h4>
-
-                                    <p class="text-muted w-lg-75 mx-auto">
-                                        Let’s get you signed in.
-                                        Enter your email and password to continue.
-                                    </p>
-
-                                </div>
-
-                                <!-- Validation Errors -->
-                                @if ($errors->any())
-
-                                    <div class="alert alert-danger">
-
-                                        {{ $errors->first() }}
-
-                                    </div>
-
-                                @endif
-
-                                <!-- Session Status -->
-                                @if (session('status'))
-
-                                    <div class="alert alert-success">
-
-                                        {{ session('status') }}
-
-                                    </div>
-
-                                @endif
-
-                                <form method="POST"
-                                    action="{{ route('login') }}">
-
-                                    @csrf
-
-                                    <!-- Email -->
-                                    <div class="mb-3">
-
-                                        <label for="email"
-                                            class="form-label">
-
-                                            Email Address
-                                            <span class="text-danger">*</span>
-
-                                        </label>
-
-                                        <div class="app-search">
-
-                                            <input
-                                                type="email"
-                                                class="form-control @error('email') is-invalid @enderror"
-                                                id="email"
-                                                name="email"
-                                                placeholder="you@example.com"
-                                                value="{{ old('email') }}"
-                                                required
-                                                autofocus>
-
-                                            <i class="ti ti-mail app-search-icon text-muted"></i>
-
-                                        </div>
-
-                                        @error('email')
-
-                                            <div class="invalid-feedback d-block">
-
-                                                {{ $message }}
-
-                                            </div>
-
-                                        @enderror
-
-                                    </div>
-
-                                    <!-- Password -->
-                                  <!-- Password -->
-<div class="mb-3">
-
-    <label for="password" class="form-label">
-        Password
-        <span class="text-danger">*</span>
-    </label>
-
-    <div class="app-search position-relative">
-
-        <input
-            type="password"
-            class="form-control @error('password') is-invalid @enderror pe-5"
-            id="password"
-            name="password"
-            placeholder="••••••••"
-            required>
-
-        <!-- Lock Icon -->
-        <i class="ti ti-lock-password app-search-icon text-muted"></i>
-
-        <!-- Show/Hide Icon -->
-        <span
-            id="togglePassword"
-            style="
-                position:absolute;
-                right:15px;
-                top:50%;
-                transform:translateY(-50%);
-                cursor:pointer;
-                z-index:5;
-            ">
-
-            <i class="ti ti-eye text-muted" id="eyeIcon"></i>
-
-        </span>
-
-    </div>
-
-    @error('password')
-
-        <div class="invalid-feedback d-block">
-            {{ $message }}
-        </div>
-
-    @enderror
-
-</div>
-
-<!-- Script -->
-<script>
-    const togglePassword = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
-    const eyeIcon = document.getElementById('eyeIcon');
-
-    togglePassword.addEventListener('click', function () {
-
-        const type = password.getAttribute('type') === 'password'
-            ? 'text'
-            : 'password';
-
-        password.setAttribute('type', type);
-
-        // Toggle icon
-        eyeIcon.classList.toggle('ti-eye');
-        eyeIcon.classList.toggle('ti-eye-off');
-
-    });
-</script>
-                                    <!-- Remember -->
-                                   
-
-                                    <!-- Submit -->
-                                    <div class="d-grid">
-
-                                        <button type="submit"
-                                            class="btn btn-primary fw-semibold py-2">
-
-                                            Sign In
-
-                                        </button>
-
-                                    </div>
-
-                                </form>
-
-                            </div>
-
+                        <div class="col-12">
+                            <input
+                                type="email"
+                                class="form-control @error('email') is-invalid @enderror"
+                                name="email"
+                                id="email"
+                                placeholder="Email Id"
+                                value="{{ old('email') }}"
+                                required
+                                autofocus
+                            />
+                            @error('email')
+                                <div class="text-danger mt-1" style="font-size:.875rem;">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <!-- Right Side Image -->
-                        <div class="col-lg-6 d-none d-lg-block">
-
-                            <div class="h-100 position-relative card-side-img rounded-end overflow-hidden"
-                                style="background-image: url('{{ asset('backend/assets/images/img.jpg') }}');
-                                       background-size: cover;
-                                       background-position: center;">
-
-                                <div class="p-4 card-img-overlay rounded-end auth-overlay d-flex align-items-end justify-content-center">
-                                </div>
-
+                        <div class="col-12">
+                            <div class="position-relative">
+                                <input
+                                    type="password"
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    name="password"
+                                    id="password"
+                                    placeholder="Password"
+                                    required
+                                    autocomplete="current-password"
+                                />
+                                <button type="button" class="passwordBtn" data-bs-toggle="button" tabindex="-1" aria-label="Show/Hide password"></button>
                             </div>
-
+                            @error('password')
+                                <div class="text-danger mt-1" style="font-size:.875rem;">{{ $message }}</div>
+                            @enderror
+                            <small><a href="{{ route('password.request') }}" class="mt-1 float-end">Forgot Password?</a></small>
                         </div>
 
-                    </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="ctaBtn">
+                                <span class="btnTxt">Login</span>
+                                <span class="arw"></span>
+                            </button>
+                        </div>
 
+                        <div class="col-12 mt-5 text-center">
+                            Didn't have an account?
+                            <a href="{{ route('register') }}" class="fw-semibold">Signup</a>
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="col-md-6 col-12 d-flex py-5 justify-content-center align-items-center bgGray loginImg">
+                    <iframe src="{{ asset('frontend/assets/watch/index.html') }}" class="watchFrame" title="Watch Display"></iframe>
                 </div>
 
             </div>
 
         </div>
 
-    </div>
+    </section>
 
-</div>
+</main>
+<script>
+    // Simple thin/regular eye icon SVG (not bold/broad stroke)
+    const eyeSvg = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23666\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z\'/%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'3.5\'/%3E%3C/svg%3E") center/contain no-repeat';
 
+    // Simple thin/regular eye-slash icon SVG (not bold)
+    const eyeSlashSvg = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%23666\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94\'/%3E%3Cpath d=\'M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M14.11 14.12a3 3 0 1 1-4.24-4.24\'/%3E%3Cline x1=\'1\' y1=\'1\' x2=\'23\' y2=\'23\'/%3E%3C/svg%3E") center/contain no-repeat';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordButtons = document.querySelectorAll('.passwordBtn');
+        
+        // Simple style for all buttons (not bold)
+        passwordButtons.forEach(button => {
+            button.style.background = eyeSlashSvg;
+            button.style.width = "24px";
+            button.style.height = "24px";
+            button.style.border = "none";
+            button.style.position = "absolute";
+            button.style.top = "50%";
+            button.style.right = "10px";
+            button.style.transform = "translateY(-50%)";
+            button.style.zIndex = "3";
+            button.style.cursor = "pointer";
+            button.style.backgroundColor = "transparent";
+            button.style.padding = "0";
+        });
+
+        passwordButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Find the password input in the same parent container
+                const input = this.closest('.position-relative').querySelector('input[type="password"], input[type="text"]');
+                if (input) {
+                    // Toggle the input type
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        this.classList.add('active');
+                        // Set simple eye open icon
+                        this.style.background = eyeSvg;
+                    } else {
+                        input.type = 'password';
+                        this.classList.remove('active');
+                        // Set simple eye closed icon
+                        this.style.background = eyeSlashSvg;
+                    }
+                }
+            });
+        });
+    });
+</script>
 @endsection

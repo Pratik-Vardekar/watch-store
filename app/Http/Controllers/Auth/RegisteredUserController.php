@@ -4,73 +4,77 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\CartService;
+use App\Services\WishlistService;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
-    public function create(): View
+    public function create()
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws ValidationException
-     */
-   public function store(Request $request): RedirectResponse
-{
-    $request->validate([
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                // Only block if an active (non-deleted) user already has this email
+                Rule::unique('users', 'email')->whereNull('deleted_at'),
+            ],
+            'phone' => 'nullable|string|max:20',
+            'password' => [
+                'required',
+                'confirmed',
+                Rules\Password::defaults(),
+            ],
+        ], [
+            'email.unique' => 'This email is already registered.',
+        ]);
 
-        'name' => ['required', 'string', 'max:255'],
+        // Soft-deleted rows still hold the unique email index — remove them so signup can proceed
+        User::onlyTrashed()
+            ->where('email', $request->email)
+            ->forceDelete();
 
-        'email' => [
-            'required',
-            'string',
-            'lowercase',
-            'email',
-            'max:255',
-            'unique:' . User::class
-        ],
+        $phone = $request->phone;
+        if ($phone) {
+            $digits = preg_replace('/\D+/', '', $phone);
+            // Drop trunk prefix 0 (e.g. 09885... → 9885...)
+            if (str_starts_with($digits, '91') && strlen($digits) > 10) {
+                $digits = '91' . ltrim(substr($digits, 2), '0');
+            } else {
+                $digits = ltrim($digits, '0');
+            }
+            $phone = str_starts_with($digits, '91') ? '+' . $digits : '+91' . $digits;
+        }
 
-        'password' => [
-            'required',
-            'confirmed',
-            Rules\Password::defaults()
-        ],
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'phone'    => $phone ?: null,
+            'password' => Hash::make($request->password),
+            'status'   => 1,
+            'role_id'  => 5, // Default User Role
+        ]);
 
-    ]);
+        event(new Registered($user));
 
-    $user = User::create([
+        Auth::login($user);
 
-        'name' => $request->name,
+        app(CartService::class)->mergeGuestCartToUser($user->id);
+        app(WishlistService::class)->mergeGuestWishlistToUser($user->id);
 
-        'email' => $request->email,
-
-        'password' => Hash::make($request->password),
-
-        'plain_password' => $request->password,
-
-        'role' => 'user',
-
-    ]);
-
-    event(new Registered($user));
-
-    Auth::login($user);
-
-    return redirect(
-        route('dashboard', absolute: false)
-    );
-}
+        return redirect()->intended('/')
+            ->with('success', 'Registration successful. Welcome!');
+    }
 }

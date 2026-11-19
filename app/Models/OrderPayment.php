@@ -18,6 +18,7 @@ class OrderPayment extends Model
         'type',        // payment | refund | adjustment
         'reference',   // UTR / gateway ref / manual ref
         'note',
+        'payment_stage',
     ];
 
     protected $casts = [

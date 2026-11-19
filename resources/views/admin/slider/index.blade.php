@@ -4,7 +4,7 @@
 
 <div class="container-fluid my-2">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-2">
         <div>
             <h4 class="mb-1">Sliders</h4>
             <p class="text-muted mb-0">Manage sliders</p>
@@ -14,6 +14,22 @@
             <i class="ti ti-plus me-1"></i>
             Add Slider
         </a>
+    </div>
+
+    <div class="alert alert-light border mb-4 py-2">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <div>
+                <strong class="text-dark">Desktop Image:</strong>
+                <span class="text-dark">1920 × 825 px</span>
+                <span class="text-primary">(aspect ratio 128:55)</span>
+            </div>
+            <div class="text-muted d-none d-md-inline">|</div>
+            <div>
+                <strong class="text-dark">Mobile Image:</strong>
+                <span class="text-dark">750 × 800 px or 600 × 600 px</span>
+                <span class="text-muted">(optional, falls back to desktop image)</span>
+            </div>
+        </div>
     </div>
 
     @if(session('success'))
@@ -95,8 +111,8 @@
                     <thead class="table-light">
                         <tr>
                             <th style="width: 50px">#</th>
-                            <th style="width: 150px">Image</th>
-                            <th>Title</th>
+                            <th style="width: 170px">Images (Desk / Mob)</th>
+                            <th>Slider Details</th>
                             <th style="width: 100px">Status</th>
                             <th style="width: 110px">Created</th>
                             <th style="width: 130px" class="text-center">Action</th>
@@ -113,23 +129,84 @@
                                 @endif
                             </td>
                             <td class="align-middle">
-                                @if($slider->image)
-                                    <img src="{{ asset('backend/assets/images/slider/' . $slider->image) }}"
-                                        class="rounded border"
-                                        style="width: 80px; height: 60px; object-fit: cover;"
-                                        alt="{{ $slider->title }}">
-                                @else
-                                    <div class="rounded border d-flex align-items-center justify-content-center"
-                                        style="width: 80px; height: 60px; background: #f5f5f5;">
-                                        <span class="text-muted small">No Image</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <!-- Desktop thumbnail -->
+                                    <div class="text-center">
+                                        @if($slider->image)
+                                            <a href="{{ $slider->image_url }}" target="_blank" title="Desktop Image (1920×825)">
+                                                <img src="{{ $slider->image_url }}"
+                                                    class="rounded border shadow-sm"
+                                                    style="width: 80px; height: 46px; object-fit: cover; background: #f8fafc;"
+                                                    alt="{{ $slider->title ?? 'Desktop Slider' }}"
+                                                    onerror="this.onerror=null;this.src='{{ asset('frontend/assets/images/heroBanner_1.jpg') }}';">
+                                            </a>
+                                        @else
+                                            <div class="rounded border d-flex flex-column align-items-center justify-content-center text-muted"
+                                                style="width: 80px; height: 46px; background: #f8fafc; font-size: 0.65rem;">
+                                                <i class="ti ti-photo-off mb-1"></i>
+                                                <span>No Image</span>
+                                            </div>
+                                        @endif
+                                        <div class="text-muted small" style="font-size: 0.68rem;">Desktop</div>
                                     </div>
-                                @endif
+
+                                    <!-- Mobile thumbnail -->
+                                    <div class="text-center">
+                                        @if($slider->mobile_image)
+                                            <a href="{{ $slider->mobile_image_url }}" target="_blank" title="Mobile Image">
+                                                <img src="{{ $slider->mobile_image_url }}"
+                                                    class="rounded border shadow-sm"
+                                                    style="width: 46px; height: 46px; object-fit: cover; background: #f8fafc;"
+                                                    alt="{{ $slider->title ?? 'Mobile Slider' }}"
+                                                    onerror="this.onerror=null;this.src='{{ $slider->image_url }}';">
+                                            </a>
+                                            <div class="text-success small" style="font-size: 0.68rem;">Mobile</div>
+                                        @else
+                                            <div class="rounded border d-flex flex-column align-items-center justify-content-center text-muted"
+                                                style="width: 46px; height: 46px; background: #f8fafc; font-size: 0.62rem;"
+                                                title="Uses Desktop fallback">
+                                                <i class="ti ti-device-mobile"></i>
+                                                <span>Auto</span>
+                                            </div>
+                                            <div class="text-muted small" style="font-size: 0.68rem;">Auto</div>
+                                        @endif
+                                    </div>
+                                </div>
                             </td>
                             <td class="align-middle">
-                                <h5 class="mb-0 fs-6">{{ $slider->title ?? '-' }}</h5>
-                                @if($slider->subtitle)
-                                    <small class="text-muted">{{ $slider->subtitle }}</small>
-                                @endif
+                                <div class="d-flex flex-column gap-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        @if($slider->title)
+                                            <span class="fw-semibold text-dark fs-6">{{ $slider->title }}</span>
+                                        @else
+                                            <span class="text-muted fst-italic small">No Title</span>
+                                        @endif
+
+                                        @if(isset($slider->sort_order))
+                                            <span class="badge bg-secondary-subtle text-secondary border" style="font-size: 0.7rem;">Order: {{ $slider->sort_order }}</span>
+                                        @endif
+                                    </div>
+
+                                    @if($slider->subtitle)
+                                        <div class="small text-secondary">
+                                            <span class="fw-medium text-dark">Subtitle:</span> {{ $slider->subtitle }}
+                                        </div>
+                                    @endif
+
+                                    @if($slider->description)
+                                        <div class="small text-muted" style="max-width: 420px;">
+                                            <span class="fw-medium text-dark">Desc:</span> {{ Str::limit($slider->description, 80) }}
+                                        </div>
+                                    @endif
+
+                                    @if($slider->link)
+                                        <div class="small">
+                                            <a href="{{ $slider->link }}" target="_blank" class="text-primary text-decoration-none">
+                                                <i class="ti ti-link me-1"></i>{{ Str::limit($slider->link, 45) }}
+                                            </a>
+                                        </div>
+                                    @endif
+                                </div>
                             </td>
                             <td class="align-middle">
                                 @if($slider->status == 1)

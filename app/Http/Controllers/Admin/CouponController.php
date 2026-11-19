@@ -76,28 +76,25 @@ class CouponController extends Controller
 
     ]);
 
-    $coupon = Coupon::create([
+   $coupon = Coupon::create([
+    'code'                 => strtoupper($request->code),
+    'type'                 => $request->type,
+    'value'                => $request->value,
+    'minimum_amount'       => $request->minimum_amount,
+    'maximum_discount'     => $request->maximum_discount,
+    'usage_limit'          => $request->usage_limit,
+    'used_count'           => 0,
+    'start_date'           => $request->start_date,
+    'end_date'             => $request->end_date,
+    'status'               => $request->status,
 
-        'code'                  => strtoupper($request->code),
-        'type'                  => $request->type,
-        'value'                 => $request->value,
-        'minimum_amount'        => $request->minimum_amount,
-        'maximum_discount'      => $request->maximum_discount,
-        'usage_limit'           => $request->usage_limit,
-        'used_count'            => 0,
-        'start_date'            => $request->start_date,
-        'end_date'              => $request->end_date,
-        'status'                => $request->status,
+    'category_ids'         => $request->categories ?? [],
+    'product_ids'          => $request->products ?? [],
+    'exclude_category_ids' => $request->excluded_categories ?? [],
+    'exclude_product_ids'  => $request->excluded_products ?? [],
+]);
 
-        // FIXED
-        'product_ids'           => $request->products ?? [],
-        'exclude_product_ids'   => $request->excluded_products ?? [],
-        'exclude_category_ids'  => $request->excluded_categories ?? [],
 
-    ]);
-
-    // INCLUDED CATEGORIES
-    $coupon->categories()->sync($request->categories ?? []);
 
     return redirect()
         ->route('coupon.index')
@@ -127,22 +124,22 @@ class CouponController extends Controller
             'status'         => 'required',
         ]);
 
-        $coupon->update([
-            // 'title'          => $request->title,
-            'code'           => strtoupper($request->code),
-            'type'           => $request->type,
-            'value'          => $request->value,
-            'minimum_amount' => $request->minimum_amount,
-             'maximum_discount' => $request->maximum_discount,
-            'usage_limit'    => $request->usage_limit,
-            'start_date'     => $request->start_date,
-            'end_date'       => $request->end_date,
-            'status'         => $request->status,
-              'product_ids'           => $request->products ?? [],
-    'exclude_product_ids'   => $request->excluded_products ?? [],
-    'exclude_category_ids'  => $request->excluded_categories ?? [],
-        ]);
-        $coupon->categories()->sync($request->categories);
+       $coupon->update([
+    'code'                 => strtoupper($request->code),
+    'type'                 => $request->type,
+    'value'                => $request->value,
+    'minimum_amount'       => $request->minimum_amount,
+    'maximum_discount'     => $request->maximum_discount,
+    'usage_limit'          => $request->usage_limit,
+    'start_date'           => $request->start_date,
+    'end_date'             => $request->end_date,
+    'status'               => $request->status,
+
+    'category_ids'         => $request->categories ?? [],
+    'product_ids'          => $request->products ?? [],
+    'exclude_category_ids' => $request->excluded_categories ?? [],
+    'exclude_product_ids'  => $request->excluded_products ?? [],
+]);
 
         return redirect()
             ->route('coupon.index')

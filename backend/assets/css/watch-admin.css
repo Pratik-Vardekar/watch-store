@@ -1,0 +1,130 @@
+/* ==========================================================================
+   THE WATCH STORE - ADMIN PANEL STYLES
+   Brand Red Overrides (#dc3545) & Authentic Green for All Success States
+   ========================================================================== */
+
+:root,
+[data-bs-theme="light"],
+[data-bs-theme="dark"],
+body.watch-admin {
+    /* Watch Store Brand Red */
+    --theme-primary: #dc3545 !important;
+    --theme-primary-rgb: 220, 53, 69 !important;
+    --brand-red: #dc3545 !important;
+
+    /* Authentic Green for Success (SweetAlert, Active badges, Success alerts) */
+    --bs-success: #198754 !important;
+    --bs-success-rgb: 25, 135, 84 !important;
+    --bs-success-text-emphasis: #0f5132 !important;
+    --bs-success-bg-subtle: #d1e7dd !important;
+    --bs-success-border-subtle: #badbcc !important;
+}
+
+/* ==========================================================================
+   1. SWEETALERT2 POPUPS - BOLD DARK GREEN
+   ========================================================================== */
+.swal2-icon.swal2-success {
+    border-color: #198754 !important;
+    color: #198754 !important;
+}
+
+.swal2-icon.swal2-success [class^='swal2-success-line'] {
+    background-color: #198754 !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+    border: .25em solid #198754 !important;
+    border-color: #198754 !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-fix {
+    background-color: transparent !important;
+}
+
+.swal2-styled.swal2-confirm {
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+}
+
+/* ==========================================================================
+   2. SUCCESS ALERTS & ACTIVE STATUS BADGES - CLEAN GREEN
+   ========================================================================== */
+.alert-success {
+    background-color: #d1e7dd !important;
+    border-color: #badbcc !important;
+    color: #0f5132 !important;
+}
+
+.alert-success i,
+.alert-success .fas,
+.alert-success .ti {
+    color: #0f5132 !important;
+}
+
+/* Active Status Badges (Category, SubCategory, User, Product status) */
+.badge.bg-success-subtle.text-success,
+.badge.badge-soft-success,
+.text-bg-success {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+    border: 1px solid #badbcc !important;
+}
+
+.badge.bg-success-subtle.text-success i,
+.badge.badge-soft-success i {
+    color: #0f5132 !important;
+}
+
+.text-success {
+    color: #198754 !important;
+}
+
+.bg-success {
+    background-color: #198754 !important;
+    color: #ffffff !important;
+}
+
+.bg-success-subtle {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+}
+
+/* Buttons */
+.btn-success {
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    color: #ffffff !important;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+    background-color: #157347 !important;
+    border-color: #146c43 !important;
+    color: #ffffff !important;
+}
+
+/* Form switch checked */
+.form-check-input:checked {
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+}
+
+/* ==========================================================================
+   3. BRAND RED ACCENTS & NAVIGATION
+   ========================================================================== */
+body.watch-admin .side-nav .side-nav-item.active > a,
+body.watch-admin .side-nav .side-nav-item.active > a .menu-icon {
+    color: #dc3545 !important;
+}
+
+.page-main-title {
+    color: #dc3545 !important;
+}
+
+/* Specific red Total badge style */
+.badge-total-red {
+    background-color: #fee7ed !important;
+    color: #dc3545 !important;
+    border: 1px solid rgba(220, 53, 69, 0.2) !important;
+}

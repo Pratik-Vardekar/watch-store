@@ -432,11 +432,13 @@ MOBILE
 
                                     <label class="form-label">
                                         <span>Usage Limit</span>
+                                        <small class="text-muted">Total uses (1 use per user enforced)</small>
                                     </label>
 
                                     <input type="number"
                                            name="usage_limit"
                                            class="form-control"
+                                           placeholder="Unlimited (1 per user)"
                                            value="{{ $coupon->usage_limit }}">
 
                                 </div>
@@ -471,7 +473,7 @@ MOBILE
                             @foreach($categories as $category)
 
                                 <option value="{{ $category->id }}"
-                                    {{ in_array($category->id, $coupon->categories->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                    {{ in_array($category->id, $coupon->category_ids ?? []) ? 'selected' : '' }}>
 
                                     {{ $category->name }}
 
@@ -506,12 +508,10 @@ MOBILE
 
                             @foreach($categories as $category)
 
-                                <option value="{{ $category->id }}"
-                                    {{ in_array($category->id, $coupon->exclude_category_ids ?? []) ? 'selected' : '' }}>
-
-                                    {{ $category->name }}
-
-                                </option>
+                               <option value="{{ $category->id }}"
+  {{ in_array($category->id, $coupon->exclude_category_ids ?? []) ? 'selected' : '' }}>
+    {{ $category->name }}
+</option>
 
                             @endforeach
 
@@ -628,24 +628,90 @@ MOBILE
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
 <script>
-
 document.addEventListener('DOMContentLoaded', function () {
 
     const settings = {
-
         plugins: ['remove_button'],
         create: false,
         maxItems: null,
-
+        hidePlaceholder: true,
+        dropdownParent: 'body'
     };
 
-    new TomSelect('#categories', settings);
+    const includeCategories = new TomSelect('#categories', settings);
+    const excludeCategories = new TomSelect('#excluded_categories', settings);
 
-    new TomSelect('#excluded_categories', settings);
+    const includeProducts = new TomSelect('#products', settings);
+    const excludeProducts = new TomSelect('#excluded_products', settings);
 
-    new TomSelect('#products', settings);
+    function syncCategoryDropdowns() {
 
-    new TomSelect('#excluded_products', settings);
+        const included = includeCategories.getValue();
+        const excluded = excludeCategories.getValue();
+
+        includeCategories.clearOptions();
+        excludeCategories.clearOptions();
+
+        @foreach($categories as $category)
+
+        if (!excluded.includes('{{ $category->id }}')) {
+            includeCategories.addOption({
+                value: '{{ $category->id }}',
+                text: '{{ $category->name }}'
+            });
+        }
+
+        if (!included.includes('{{ $category->id }}')) {
+            excludeCategories.addOption({
+                value: '{{ $category->id }}',
+                text: '{{ $category->name }}'
+            });
+        }
+
+        @endforeach
+
+        includeCategories.refreshOptions(false);
+        excludeCategories.refreshOptions(false);
+    }
+
+    function syncProductDropdowns() {
+
+        const included = includeProducts.getValue();
+        const excluded = excludeProducts.getValue();
+
+        includeProducts.clearOptions();
+        excludeProducts.clearOptions();
+
+        @foreach($products as $product)
+
+        if (!excluded.includes('{{ $product->id }}')) {
+            includeProducts.addOption({
+                value: '{{ $product->id }}',
+                text: '{{ $product->name }}'
+            });
+        }
+
+        if (!included.includes('{{ $product->id }}')) {
+            excludeProducts.addOption({
+                value: '{{ $product->id }}',
+                text: '{{ $product->name }}'
+            });
+        }
+
+        @endforeach
+
+        includeProducts.refreshOptions(false);
+        excludeProducts.refreshOptions(false);
+    }
+
+    includeCategories.on('change', syncCategoryDropdowns);
+    excludeCategories.on('change', syncCategoryDropdowns);
+
+    includeProducts.on('change', syncProductDropdowns);
+    excludeProducts.on('change', syncProductDropdowns);
+
+    syncCategoryDropdowns();
+    syncProductDropdowns();
 
 });
 

@@ -11,15 +11,28 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-     ->withCommands()   // ✅ ADD THIS LINE
+    ->withCommands()
     ->withMiddleware(function (Middleware $middleware) {
-   
-
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'permission' => \App\Http\Middleware\CheckPermission::class,
         ]);
 
+        $middleware->redirectGuestsTo(fn () => route('login'));
+
+        // Authenticated users hitting guest pages (login/register)
+        $middleware->redirectUsersTo(function () {
+            $user = auth()->user();
+
+            if ($user && method_exists($user, 'canAccessAdmin') && $user->canAccessAdmin()) {
+                return route('admin.dashboard');
+            }
+
+            return route('profile.profile');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->create();

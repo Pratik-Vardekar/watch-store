@@ -9,7 +9,11 @@ class Cart extends Model
     protected $fillable = [
         'user_id',
         'product_id',
+        'variant_id',
+        'session_id',
+        'address_id',
         'quantity',
+        'coupon_code',  // ← ADD THIS LINE
     ];
 
     /*
@@ -28,4 +32,13 @@ class Cart extends Model
         return $this->belongsTo(Product::class);
     }
 
-}   
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class);
+    }
+      // Add this relationship - Relationship with Address
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'address_id');
+    }
+}

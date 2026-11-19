@@ -73,7 +73,12 @@
     </div>
 
 </div>
+
                 <div class="col-md-6">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" id="description" class="form-control" rows="3">{{ old('description') }}</textarea>
+                </div>
+                <div class="col-md-3">
 
                     <label class="form-label">Status</label>
 
@@ -87,6 +92,35 @@
                     </select>
 
                 </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Show in Header Menu</label>
+                    <select name="gender" class="form-select">
+                        <option value="both" {{ old('gender', 'both') === 'both' ? 'selected' : '' }}>Both (Women & Men)</option>
+                        @foreach(\App\Models\Category::GENDERS as $value => $label)
+                            @if($value !== 'both')
+                            <option value="{{ $value }}" {{ old('gender', 'both') === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                            @endif
+                        @endforeach
+                    </select>
+                    <small class="text-muted">Women / Men mega menu on the storefront.</small>
+                </div>
+
+                {{-- <div class="col-md-3">
+                    <label class="form-label">Display Order</label>
+                    <input type="number"
+                        name="sort_order"
+                        class="form-control @error('sort_order') is-invalid @enderror"
+                        min="0"
+                        value="{{ old('sort_order') }}"
+                        placeholder="Auto">
+                    <small class="text-muted">Lower number shows first. Leave blank to auto-assign.</small>
+                    @error('sort_order')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div> --}}
 
                 <div class="col-12">
 

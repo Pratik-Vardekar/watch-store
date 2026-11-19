@@ -114,13 +114,13 @@ class DashboardController extends Controller
             ->pluck('count', 'date')
             ->toArray();
         
-        $barLabels = [];
-        $barValues = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = Carbon::now()->subDays($i)->format('Y-m-d');
-            $barLabels[] = Carbon::now()->subDays($i)->format('D');
-            $barValues[] = $weeklyProducts[$date] ?? 0;
-        }
+       $barLabels = Category::pluck('name')->toArray();
+
+$barValues = Category::withCount('products')
+    ->get()
+    ->pluck('products_count')
+    ->toArray();
+        
         
         // VISUAL 3: SPARKLINE - Already have $blogSparkline, using for blogs card
         

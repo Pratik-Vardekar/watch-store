@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class OrderItem extends Model
 {
     protected $fillable = [
-
         'order_id',
         'product_id',
+        'variant_id',
         'quantity',
         'price',
         'total',
-
     ];
 
     public function order()
@@ -26,9 +25,13 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
+    }
 
-public function variant()
-{
-    return $this->belongsTo(ProductVariant::class, 'variant_id');
-}
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'variant_id');
+    }
 }

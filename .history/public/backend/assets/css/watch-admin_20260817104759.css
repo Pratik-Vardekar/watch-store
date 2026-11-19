@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap');
+
+:root {
+   --watch-orange: #2A9F43;
+   --watch-purple: #d0c9e2;
+   --watch-purple-dark: #b3adc3;
+   --watch-purple-light: #a396b9;
+   --watch-red: #fc3335;
+   --watch-red-dark: #e82a2c;
+   --watch-purple-subtle: #ebe2ff;
+   --watch-red-subtle: #fee7ed;
+
+   --theme-primary: #7846f0;
+   --theme-primary-rgb: 120, 70, 240;
+   --theme-primary-text-emphasis: #6238c9;
+   --theme-primary-bg-subtle: #ebe2ff;
+   --theme-primary-border-subtle: #c9b5f9;
+}
+
+body.watch-admin {
+   --bs-success: var(--theme-primary);
+   --bs-success-rgb: var(--theme-primary-rgb);
+   --bs-success-text-emphasis: var(--theme-primary-text-emphasis);
+   --bs-success-bg-subtle: var(--theme-primary-bg-subtle);
+   --bs-success-border-subtle: var(--theme-primary-border-subtle);
+   --theme-sidenav-item-hover-bg: transparent;
+}
+
+body.watch-admin,
+body.watch-admin .side-nav,
+body.watch-admin .app-topbar,
+body.watch-admin .content-page,
+body.watch-admin .page-title-head,
+body.watch-admin .card,
+body.watch-admin .btn,
+body.watch-admin .form-control {
+   font-family: 'Baloo 2', cursive, sans-serif !important;
+}
+
+html[data-topbar-color=light] body.watch-admin {
+   --theme-topbar-item-hover-color: var(--watch-purple);
+}
+
+body.watch-admin .btn-primary,
+body.watch-admin .sidenav-toggle-button.btn-primary {
+   background-color: #eb6c16 !important;
+   border-color: #eb6c16 !important;
+   color: #fff !important;
+}
+
+body.watch-admin .btn-primary:hover,
+body.watch-admin .btn-primary:focus,
+body.watch-admin .btn-primary:active,
+body.watch-admin .sidenav-toggle-button.btn-primary:hover,
+body.watch-admin .sidenav-toggle-button.btn-primary:focus,
+body.watch-admin .sidenav-toggle-button.btn-primary:active {
+   background-color: #c85a10 !important;
+   border-color: #c85a10 !important;
+   color: #fff !important;
+}
+
+body.watch-admin .side-nav > .side-nav-item.active > a,
+body.watch-admin .side-nav > .side-nav-item.active > button {
+   background: transparent !important;
+   color: #fff !important;
+   border-radius: .5rem !important;
+   font-weight: 700;
+}
+
+body.watch-admin .side-nav > .side-nav-item.active > a .menu-icon,
+body.watch-admin .side-nav > .side-nav-item.active > button .menu-icon {
+   color: #fff !important;
+}
+
+/* Sidebar menu links: no background on hover/focus (incl. active item) */
+body.watch-admin .sidenav-menu .side-nav > .side-nav-item:hover > .side-nav-link,
+body.watch-admin .sidenav-menu .side-nav > .side-nav-item > .side-nav-link:hover,
+body.watch-admin .sidenav-menu .side-nav > .side-nav-item > .side-nav-link:focus,
+body.watch-admin .sidenav-menu .side-nav > .side-nav-item > .side-nav-link:active,
+body.watch-admin .sidenav-menu .side-nav .sub-menu .side-nav-link:hover,
+body.watch-admin .sidenav-menu .side-nav .sub-menu .side-nav-link:focus,
+body.watch-admin .sidenav-menu .side-nav .sub-menu .side-nav-link:active,
+html[data-sidenav-size=condensed] body.watch-admin .sidenav-menu .side-nav > .side-nav-item:hover > .side-nav-link {
+   background: transparent !important;
+   background-color: transparent !important;
+   box-shadow: none !important;
+}
+body.watch-admin .page-main-title {
+   color: var(--watch-purple);
+   font-weight: 700;
+}
+
+body.watch-admin .breadcrumb-item.active {
+   color: var(--watch-purple);
+}
+
+body.watch-admin .breadcrumb-item a {
+   color: var(--watch-red);
+}
+
+body.watch-admin .content-page {
+   background: #faf9ff !important;
+}
+
+body.watch-admin .transition-card {
+   border-radius: 1rem !important;
+   border-color: var(--watch-purple-subtle) !important;
+}
+
+body.watch-admin .transition-card:hover {
+   border-color: var(--watch-red) !important;
+   box-shadow: 0 .5rem 1.25rem rgba(120, 70, 240, .15) !important;
+}
+
+body.watch-admin .footer {
+   border-top: 2px solid var(--watch-purple-subtle);
+}
+
+body.watch-admin .footer a {
+   color: var(--watch-purple) !important;
+}
+
+body.watch-admin .text-watch-purple { color: var(--watch-purple) !important; }
+body.watch-admin .text-watch-red { color: var(--watch-red) !important; }
+body.watch-admin .bg-watch-purple-subtle { background-color: var(--watch-purple-subtle) !important; }
+body.watch-admin .bg-watch-red-subtle { background-color: var(--watch-red-subtle) !important; }
+body.watch-admin .badge-watch-purple {
+   background-color: var(--watch-purple-subtle) !important;
+   color: var(--watch-purple) !important;
+}
+body.watch-admin .badge-watch-red {
+   background-color: var(--watch-red-subtle) !important;
+   color: var(--watch-red) !important;
+}
+
+#toastContainer {
+   top: 1rem;
+   right: 1rem;
+   left: auto;
+   transform: none;
+   width: min(380px, calc(100% - 2rem));
+   padding: 0;
+   z-index: 11000;
+}
+
+.watch-toast {
+   width: 100%;
+   border: 0;
+   border-radius: .75rem;
+   overflow: hidden;
+   box-shadow: 0 8px 24px rgba(43, 42, 42, .18);
+   animation: watchToastIn .35s ease;
+}
+
+.watch-toast .toast-inner {
+   display: flex;
+   align-items: center;
+   gap: .75rem;
+   padding: .85rem 1rem;
+   color: #fff;
+   font-weight: 600;
+   font-size: 1rem;
+   background: linear-gradient(90deg, #7846f0 0%, #9a6df7 100%);
+}
+
+.watch-toast-error .toast-inner {
+   background: linear-gradient(90deg, var(--watch-red) 0%, var(--watch-red-dark) 100%);
+}
+
+.watch-toast-icon {
+   width: 2.25rem;
+   height: 2.25rem;
+   border-radius: .35rem;
+   background: #fff;
+   padding: .2rem;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   flex-shrink: 0;
+   overflow: hidden;
+}
+
+.watch-toast-icon img {
+   width: 100%;
+   height: auto;
+   object-fit: contain;
+   display: block;
+}
+
+.watch-toast-body { flex: 1; line-height: 1.35; }
+
+.watch-toast-close {
+   width: 1.75rem;
+   height: 1.75rem;
+   border: 0;
+   border-radius: 50%;
+   background: rgba(255, 255, 255, .2);
+   color: #fff;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   flex-shrink: 0;
+   font-size: 1.1rem;
+   cursor: pointer;
+}
+
+@keyframes watchToastIn {
+   from { opacity: 0; transform: translateX(16px); }
+   to { opacity: 1; transform: translateX(0); }
+}
+
+/* Product form: Tom Select category dropdown */
+body.watch-admin .product-category-field {
+   position: relative;
+   z-index: 40;
+   overflow: visible;
+}
+
+body.watch-admin .product-category-field .ts-wrapper {
+   position: relative;
+   z-index: 1;
+}
+
+body.watch-admin .product-category-field .ts-wrapper.dropdown-active,
+body.watch-admin .product-category-field .ts-wrapper.focus {
+   z-index: 1080;
+}
+
+body.watch-admin .ts-dropdown {
+   position: absolute !important;
+   left: 0 !important;
+   right: 0 !important;
+   width: 100% !important;
+   z-index: 1080 !important;
+   margin-top: 4px !important;
+   background: #ffffff !important;
+   border: 1px solid #dee2e6 !important;
+   border-radius: 0.5rem !important;
+   box-shadow: 0 0.75rem 1.5rem rgba(18, 15, 15, 0.16) !important;
+}
+
+body.watch-admin .ts-dropdown .ts-dropdown-content {
+   background: #ffffff !important;
+   max-height: 240px;
+   overflow-y: auto;
+}
+
+body.watch-admin .ts-dropdown .option,
+body.watch-admin .ts-dropdown .no-results,
+body.watch-admin .ts-dropdown .create {
+   background: #ffffff !important;
+   color: #212529 !important;
+   padding: 0.5rem 0.85rem !important;
+   white-space: nowrap;
+}
+
+body.watch-admin .ts-dropdown .option:hover,
+body.watch-admin .ts-dropdown .option.active {
+   background: #f3eefc !important;
+   color: #212529 !important;
+}
+
+body.watch-admin .product-form-card,
+body.watch-admin .product-form-card .card-body,
+body.watch-admin .product-form-card .row {
+   overflow: visible;
+}

@@ -72,6 +72,11 @@
                 </div>
 
                 <div class="col-md-6">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" id="description" class="form-control" rows="3">{{ old('description', $category->description) }}</textarea>
+                </div>
+                
+                <div class="col-md-3">
 
                     <label class="form-label">Status</label>
 
@@ -80,18 +85,46 @@
                         required>
 
                         <option value="1"
-                            {{ $category->status == 1 ? 'selected' : '' }}>
+                            {{ old('status', $category->status) == 1 ? 'selected' : '' }}>
                             Active
                         </option>
 
                         <option value="0"
-                            {{ $category->status == 0 ? 'selected' : '' }}>
+                            {{ old('status', $category->status) == 0 ? 'selected' : '' }}>
                             Inactive
                         </option>
 
                     </select>
 
                 </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Show in Header Menu</label>
+                    <select name="gender" class="form-select">
+                        <option value="both" {{ old('gender', $category->gender ?: 'both') === 'both' ? 'selected' : '' }}>Both (Women & Men)</option>
+                        @foreach(\App\Models\Category::GENDERS as $value => $label)
+                            @if($value !== 'both')
+                            <option value="{{ $value }}" {{ old('gender', $category->gender ?: 'both') === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                            @endif
+                        @endforeach
+                    </select>
+                    <small class="text-muted">Women / Men mega menu on the storefront.</small>
+                </div>
+{{-- 
+                <div class="col-md-3">
+                    <label class="form-label">Display Order</label>
+                    <input type="number"
+                        name="sort_order"
+                        class="form-control @error('sort_order') is-invalid @enderror"
+                        min="0"
+                        value="{{ old('sort_order', $category->sort_order) }}">
+                    <small class="text-muted">Lower number shows first.</small>
+                    @error('sort_order')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div> --}}
 
                 <div class="col-12">
 

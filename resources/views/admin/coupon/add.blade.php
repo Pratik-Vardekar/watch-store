@@ -482,14 +482,14 @@ MOBILE
                 <span>Usage Limit</span>
 
                 <small>
-                    Optional
+                    Total uses (1 use per user enforced)
                 </small>
             </label>
 
             <input type="number"
                    name="usage_limit"
                    class="form-control"
-                   placeholder="Unlimited">
+                   placeholder="Unlimited (1 per user)">
 
         </div>
 

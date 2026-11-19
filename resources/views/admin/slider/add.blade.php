@@ -1,145 +1,162 @@
 @extends('layouts.admin')
 
 @section('content')
+    <div class="container-fluid my-2">
 
-<div class="container-fluid my-2">
+        <div class="mb-3">
+            <h4 class="mb-1">Add Slider</h4>
+            <p class="text-muted mb-0">Create new slider</p>
+        </div>
 
-    <div class="mb-4">
-
-        <h4 class="mb-1">Add Slider</h4>
-        <p class="text-muted mb-0">Create new slider</p>
-
-    </div>
-
-    <div class="card">
-
-        <div class="card-body">
-
-            <form action="{{ route('slider.store') }}"
-                method="POST"
-                enctype="multipart/form-data"
-                class="row g-3">
-
-                @csrf
-
-                <div class="col-md-6">
-
-                    <label class="form-label">Title</label>
-
-                    <input type="text"
-                        name="title"
-                        class="form-control"
-                        required>
-
+        <div class="card border mb-3">
+            <div class="card-body py-2 px-3 bg-light rounded">
+                <div class="small text-dark">
+                    <span class="fw-semibold">Desktop Image:</span> 1920 × 825 px <span class="text-primary">(aspect ratio 128:55)</span>
                 </div>
-
-                <div class="col-md-6">
-
-                    <label class="form-label">Status</label>
-
-                    <select name="status"
-                        class="form-select">
-
-                        <option value="1">Active</option>
-                        <option value="0">Inactive</option>
-
-                    </select>
-
+                <div class="small text-dark mt-1">
+                    <span class="fw-semibold">Mobile Image:</span> 750 × 800 px or 600 × 600 px <span class="text-muted">(optional, falls back to desktop image)</span>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <ul class="mb-0 ps-3">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
 
-                    <label class="form-label">Description</label>
+                <form action="{{ route('slider.store') }}" method="POST" enctype="multipart/form-data" class="row g-3">
+                    @csrf
 
-                    <textarea name="description"
-                        class="form-control"
-                        rows="4"></textarea>
+                    <!-- Title -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Title</label>
+                        <input type="text" name="title" class="form-control" value="{{ old('title') }}" placeholder="Slider Title">
+                    </div>
 
-                </div>
+                    <!-- Status -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="1" {{ old('status', '1') == '1' ? 'selected' : '' }}>Active</option>
+                            <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Inactive</option>
+                        </select>
+                    </div>
 
-                <div class="col-md-6">
+                    <!-- Sort Order -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Sort Order</label>
+                        <input type="number" name="sort_order" class="form-control" value="{{ old('sort_order', 1) }}" placeholder="1">
+                    </div>
 
-                    <label class="form-label">Image</label>
+                    <!-- Link -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Link</label>
+                        <input type="url" name="link" class="form-control" value="{{ old('link') }}" placeholder="https://example.com">
+                    </div>
 
-                    <input type="file"
-                        name="image"
-                        id="image"
-                        class="form-control"
-                        accept="image/*"
-                        required>
+                    <!-- Description -->
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Description</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Enter slider description...">{{ old('description') }}</textarea>
+                    </div>
 
-                </div>
+                    <!-- Desktop Image -->
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="form-label fw-semibold mb-0" for="desktop_image">
+                                Desktop Image <span class="text-danger">*</span>
+                            </label>
+                            <span class="text-muted small">1920 × 825 px</span>
+                        </div>
+                        <input type="file" name="image" id="desktop_image" class="form-control" accept="image/*" required>
+                        <small class="text-muted d-block mt-1">Required for slider display on desktop screens.</small>
 
-                <div class="col-md-6">
+                        <div class="mt-3 d-none" id="desktop-preview-container">
+                            <label class="form-label small fw-semibold text-muted mb-1 d-block">Desktop Preview</label>
+                            <div class="d-inline-block p-1 border rounded bg-light">
+                                <img id="preview-desktop-image"
+                                    class="rounded border shadow-sm"
+                                    style="width: 190px; height: 95px; object-fit: cover;"
+                                    alt="Desktop Slider Preview">
+                            </div>
+                        </div>
+                    </div>
 
-                    <label class="form-label d-none"
-                        id="preview-label">
+                    <!-- Mobile Image -->
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="form-label fw-semibold mb-0" for="mobile_image">
+                                Mobile Image
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle ms-1" style="font-size: 0.72rem;">Optional</span>
+                            </label>
+                            <span class="text-muted small">750 × 800 px or 600 × 600 px</span>
+                        </div>
+                        <input type="file" name="mobile_image" id="mobile_image" class="form-control" accept="image/*">
+                        <small class="text-muted d-block mt-1">Optional. If omitted, desktop image will be used on mobile.</small>
 
-                        Preview
+                        <div class="mt-3 d-none" id="mobile-preview-container">
+                            <label class="form-label small fw-semibold text-muted mb-1 d-block">Mobile Preview</label>
+                            <div class="d-inline-block p-1 border rounded bg-light">
+                                <img id="preview-mobile-image"
+                                    class="rounded border shadow-sm"
+                                    style="width: 95px; height: 95px; object-fit: cover;"
+                                    alt="Mobile Slider Preview">
+                            </div>
+                        </div>
+                    </div>
 
-                    </label>
-
-                    <img id="preview-image"
-                        class="rounded border d-none"
-                        style="width:120px;height:120px;object-fit:cover;">
-
-                </div>
-
-                <div class="col-12">
-
-                    <button type="submit"
-                        class="btn btn-primary">
-
-                        <i class="ti ti-device-floppy me-1"></i>
-                        Save Slider
-
-                    </button>
-
-                    <a href="{{ route('slider.index') }}"
-                        class="btn btn-light">
-
-                        Cancel
-
-                    </a>
-
-                </div>
-
-            </form>
-
+                    <div class="col-12 mt-4 pt-2 border-top d-flex align-items-center">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center">
+                            <i class="ti ti-device-floppy me-1"></i>
+                            Save Slider
+                        </button>
+                        <a href="{{ route('slider.index') }}" class="btn btn-light ms-2">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
 
     </div>
 
-</div>
+    <script>
+        // Desktop Image Preview
+        document.getElementById('desktop_image').addEventListener('change', function(e) {
+            let file = e.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    let preview = document.getElementById('preview-desktop-image');
+                    let container = document.getElementById('desktop-preview-container');
+                    preview.src = event.target.result;
+                    container.classList.remove('d-none');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
 
-<script>
-
-document.getElementById('image').addEventListener('change', function(e) {
-
-    let file = e.target.files[0];
-
-    if(file) {
-
-        let reader = new FileReader();
-
-        reader.onload = function(event) {
-
-            let preview = document.getElementById('preview-image');
-            let label = document.getElementById('preview-label');
-
-            preview.src = event.target.result;
-
-            preview.classList.remove('d-none');
-            label.classList.remove('d-none');
-
-        }
-
-        reader.readAsDataURL(file);
-
-    }
-
-});
-
-</script>
-
+        // Mobile Image Preview
+        document.getElementById('mobile_image').addEventListener('change', function(e) {
+            let file = e.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    let preview = document.getElementById('preview-mobile-image');
+                    let container = document.getElementById('mobile-preview-container');
+                    preview.src = event.target.result;
+                    container.classList.remove('d-none');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 @endsection

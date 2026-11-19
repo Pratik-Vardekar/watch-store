@@ -109,6 +109,24 @@
 
                 </div>
 
+                <div class="col-md-6">
+
+                    <label class="form-label">Show in Explore Menu</label>
+
+                    <select name="show_in_explore"
+                        class="form-select @error('show_in_explore') is-invalid @enderror">
+
+                        <option value="0" {{ old('show_in_explore', '0') == '0' ? 'selected' : '' }}>No</option>
+                        <option value="1" {{ old('show_in_explore') == '1' ? 'selected' : '' }}>Yes</option>
+
+                    </select>
+                    <small class="text-muted">Shows as a tile in the storefront Explore menu. Maximum 4 subcategories.</small>
+                    @error('show_in_explore')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+
+                </div>
+
                 <div class="col-12">
 
                     <button class="btn btn-primary">
