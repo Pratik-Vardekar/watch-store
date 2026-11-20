@@ -20,7 +20,7 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
 
-    <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}?v=25">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}?v=26">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style1.css') }}?v=24">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/search-suggest.css') }}?v=5">
 
