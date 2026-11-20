@@ -114,8 +114,7 @@
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 mb-md-4">
                             <h2 class="sectTitle lh-1 mb-0 d-inline-flex align-items-center flex-wrap gap-2 gap-sm-3">
                                 Orders
-                                <small class="bagCount bgOrange text-white rounded-pill py-1 px-2">{{ $orders->total() }}
-                                    order{{ $orders->total() != 1 ? 's' : '' }}</small>
+                                <small class="bagCount bgOrange text-white rounded-pill py-1 px-2">{{ $orders->total() }}</small>
                             </h2>
                             <form method="GET" class="myAccFilterForm">
                                 <select class="form-select fw-semibold" name="status" onchange="this.form.submit()">
